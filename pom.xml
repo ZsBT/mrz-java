@@ -24,7 +24,7 @@
     <groupId>org.innovatrics.mrz</groupId>
     <artifactId>mrz-java</artifactId>
     <packaging>jar</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
     <name>MRZ Java Parser</name>
     <url>http://code.google.com/p/mrz-java/</url>
     <inceptionYear>2011</inceptionYear>
