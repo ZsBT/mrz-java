@@ -40,6 +40,9 @@ public enum MrzFormat {
      * MRTD td2 format: A two line long, 36 characters per line format.
      */
     MTRD_TD2(2, 36, MrtdTd2.class),
+    /**
+     * MRP Passport format: A two line long, 44 characters per line format.
+     */
     PASSPORT(2, 44, MRP.class),
     /**
      * Unknown 2 line/34 characters per line format, used with old Slovak ID cards.
@@ -77,7 +80,7 @@ public enum MrzFormat {
     }
 
     /**
-     * Creates new record instance, parsing this MRZ format.
+     * Creates new record instance with this type.
      * @return never null record instance.
      */
     public final MrzRecord newRecord() {
