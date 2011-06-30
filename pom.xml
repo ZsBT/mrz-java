@@ -40,7 +40,7 @@
     </scm>
     <issueManagement>
         <system>GoogleCode</system>
-        <url>http://code.google.com/p/gphoto2-java/issues/list</url>
+        <url>http://code.google.com/p/mrz-java/issues/list</url>
     </issueManagement>
     <distributionManagement>
         <repository>
