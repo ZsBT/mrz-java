@@ -18,14 +18,19 @@
  */
 package com.innovatrics.mrz.types;
 
+import java.io.Serializable;
+
 /**
  * Holds a MRZ date type.
  * @author Martin Vysny
  */
-public class MrzDate {
+public class MrzDate implements Serializable, Comparable<MrzDate> {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Year, 00-99.
+     * <p/>
+     * Note: I am unable to find a specification of conversion of this value to a full year value.
      */
     public final int year;
     /**
@@ -46,7 +51,7 @@ public class MrzDate {
 
     @Override
     public String toString() {
-        return "MrzDate{" + "year=" + year + ", month=" + month + ", day=" + day + '}';
+        return "{" + day + "/" + month + "/" + year + '}';
     }
 
     public String toMrz() {
@@ -93,5 +98,9 @@ public class MrzDate {
         hash = 11 * hash + this.month;
         hash = 11 * hash + this.day;
         return hash;
+    }
+
+    public int compareTo(MrzDate o) {
+        return Integer.valueOf(year * 10000 + month * 100 + day).compareTo(o.year * 10000 + o.month * 100 + o.day);
     }
 }
