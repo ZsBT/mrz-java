@@ -28,6 +28,7 @@ import com.innovatrics.mrz.types.MrzFormat;
  * @author Martin Vysny
  */
 public class Unknown2_34 extends MrzRecord {
+    private static final long serialVersionUID = 1L;
 
     public Unknown2_34() {
         super(MrzFormat.UNKNOWN234);

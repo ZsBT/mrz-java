@@ -28,6 +28,7 @@ import com.innovatrics.mrz.types.MrzFormat;
  * @author Martin Vysny
  */
 public class MRP extends MrzRecord {
+    private static final long serialVersionUID = 1L;
 
     public MRP() {
         super(MrzFormat.PASSPORT);

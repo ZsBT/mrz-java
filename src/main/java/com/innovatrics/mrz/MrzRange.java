@@ -18,11 +18,14 @@
  */
 package com.innovatrics.mrz;
 
+import java.io.Serializable;
+
 /**
  * Represents a text selection range.
  * @author Martin Vysny
  */
-public class MrzRange {
+public class MrzRange implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * 0-based index of first character in the range.

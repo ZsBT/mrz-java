@@ -22,12 +22,13 @@ import com.innovatrics.mrz.types.MrzDate;
 import com.innovatrics.mrz.types.MrzFormat;
 import com.innovatrics.mrz.types.MrzDocumentCode;
 import com.innovatrics.mrz.types.MrzSex;
+import java.io.Serializable;
 
 /**
  * An abstract MRZ record, contains basic information present in all MRZ record types.
  * @author Martin Vysny
  */
-public abstract class MrzRecord {
+public abstract class MrzRecord implements Serializable {
     /**
      * The document code.
      */

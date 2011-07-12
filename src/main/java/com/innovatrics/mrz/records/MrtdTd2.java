@@ -28,6 +28,7 @@ import com.innovatrics.mrz.types.MrzFormat;
  * @author Martin Vysny
  */
 public class MrtdTd2 extends MrzRecord {
+    private static final long serialVersionUID = 1L;
 
     public MrtdTd2() {
         super(MrzFormat.MTRD_TD2);
