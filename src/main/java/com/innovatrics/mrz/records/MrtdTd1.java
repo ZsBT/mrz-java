@@ -31,7 +31,7 @@ public class MrtdTd1 extends MrzRecord {
     private static final long serialVersionUID = 1L;
 
     public MrtdTd1() {
-        super(MrzFormat.MTRD_TD1);
+        super(MrzFormat.MRTD_TD1);
     }
     /**
      * Optional data at the discretion

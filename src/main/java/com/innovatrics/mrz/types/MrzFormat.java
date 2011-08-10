@@ -35,11 +35,11 @@ public enum MrzFormat {
     /**
      * MRTD td1 format: A three line long, 30 characters per line format.
      */
-    MTRD_TD1(3, 30, MrtdTd1.class),
+    MRTD_TD1(3, 30, MrtdTd1.class),
     /**
      * MRTD td2 format: A two line long, 36 characters per line format.
      */
-    MTRD_TD2(2, 36, MrtdTd2.class),
+    MRTD_TD2(2, 36, MrtdTd2.class),
     /**
      * MRP Passport format: A two line long, 44 characters per line format.
      */
