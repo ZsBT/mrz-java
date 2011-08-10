@@ -40,6 +40,12 @@ public class MrzRange implements Serializable {
      */
     public final int row;
 
+    /**
+     * Creates new MRZ range object.
+     * @param column 0-based index of first character in the range.
+     * @param columnTo 0-based index of a character after last character in the range.
+     * @param row 0-based row.
+     */
     public MrzRange(int column, int columnTo, int row) {
         if (column > columnTo) {
             throw new IllegalArgumentException("Parameter column: invalid value " + column + ": must be less than " + columnTo);
