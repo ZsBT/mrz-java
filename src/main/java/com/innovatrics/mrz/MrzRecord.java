@@ -118,4 +118,10 @@ public abstract class MrzRecord implements Serializable {
         surname = name[0];
         givenNames = name[1];
     }
+    
+    /**
+     * Serializes this record to a valid MRZ record.
+     * @return a valid MRZ record, not null.
+     */
+    public abstract String toMrz();
 }

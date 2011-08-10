@@ -18,6 +18,7 @@
  */
 package com.innovatrics.mrz;
 
+import com.innovatrics.mrz.records.FrenchIdCard;
 import com.innovatrics.mrz.records.SlovakId2_34;
 import com.innovatrics.mrz.records.MrtdTd1;
 import com.innovatrics.mrz.records.MrtdTd2;
@@ -83,7 +84,7 @@ public class MrzParserTest {
     }
 
     @Test
-    public void testUnknown234Parsing() {
+    public void testSlovakId234Parsing() {
         final SlovakId2_34 r = (SlovakId2_34) MrzParser.parse("I<SVKNOVAK<<JAN<<<<<<<<<<<<<<<<<<<\n123456<AA5SVK8110251M1801020749313");
         assertEquals(MrzDocumentCode.TypeI, r.code);
         assertEquals('I', r.code1);
@@ -97,5 +98,43 @@ public class MrzParserTest {
         assertEquals(MrzSex.Male, r.sex);
         assertEquals("NOVAK", r.surname);
         assertEquals("JAN", r.givenNames);
+    }
+
+    @Test
+    public void testFrenchIdCardParsing() {
+        final FrenchIdCard r = (FrenchIdCard) MrzParser.parse("IDFRANOVAK<<<<<<<<<<<<<<<12345678901\nABCDE12345126JAN<<<<<<<<<<<8110251M<\n");
+        assertEquals(MrzDocumentCode.TypeI, r.code);
+        assertEquals('I', r.code1);
+        assertEquals('D', r.code2);
+        assertEquals("FRA", r.issuingCountry);
+        assertEquals("FRA", r.nationality);
+        assertEquals("12345678901", r.optional);
+        assertEquals("ABCDE1234512", r.documentNumber);
+//        assertEquals(new MrzDate(18, 1, 2), r.expirationDate);
+        assertEquals(new MrzDate(81, 10, 25), r.dateOfBirth);
+        assertEquals(MrzSex.Male, r.sex);
+        assertEquals("NOVAK", r.surname);
+        assertEquals("JAN", r.givenNames);
+    }
+
+    @Test
+    public void testFrenchIdToMrz() {
+        final FrenchIdCard r = new FrenchIdCard();
+        r.issuingCountry = "FRA";
+        r.nationality = "FRA";
+        r.optional = "12345678901";
+        r.documentNumber = "ABCDE1234512";
+        r.expirationDate = new MrzDate(18, 1, 2);
+        r.dateOfBirth = new MrzDate(81, 10, 25);
+        r.sex = MrzSex.Male;
+        r.surname = "NOVAK";
+        r.givenNames = "JAN";
+        assertEquals("IDFRANOVAK<<<<<<<<<<<<<<<12345678901\nABCDE12345126JAN<<<<<<<<<<<8110251M<\n", r.toMrz());
+    }
+
+    @Test
+    public void testToMrz() {
+        assertEquals("CACACA<<<<<", MrzParser.toMrz("čačača", 11));
+        assertEquals("HERBERT<<FRANK<<<", MrzParser.toMrz("Herbert  Frank", 17));
     }
 }

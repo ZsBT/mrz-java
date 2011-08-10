@@ -60,4 +60,9 @@ public class MRP extends MrzRecord {
     public String toString() {
         return "MRP{" + super.toString() + ", personalNumber=" + personalNumber + '}';
     }
+
+    @Override
+    public String toMrz() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

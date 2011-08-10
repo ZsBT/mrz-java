@@ -32,4 +32,10 @@ public class MrzDateTest {
         assertFalse(new MrzDate(55, 3, 31).equals(new MrzDate(55, 4, 31)));
         assertFalse(new MrzDate(54, 4, 31).equals(new MrzDate(55, 4, 31)));
     }
+
+    @Test
+    public void testToMrz() {
+        assertEquals("550431", new MrzDate(55, 4, 31).toMrz());
+        assertEquals("081201", new MrzDate(8, 12, 1).toMrz());
+    }
 }

@@ -62,4 +62,9 @@ public class MrtdTd2 extends MrzRecord {
     public String toString() {
         return "MRTD-TD2{" + super.toString() + ", optional=" + optional + '}';
     }
+
+    @Override
+    public String toMrz() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

@@ -59,6 +59,11 @@ public class SlovakId2_34 extends MrzRecord {
 
     @Override
     public String toString() {
-        return "Unknown2x34{" + super.toString() + ", optional=" + optional + '}';
+        return "SlovakId2x34{" + super.toString() + ", optional=" + optional + '}';
+    }
+
+    @Override
+    public String toMrz() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

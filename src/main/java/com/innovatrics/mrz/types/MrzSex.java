@@ -24,10 +24,19 @@ package com.innovatrics.mrz.types;
  */
 public enum MrzSex {
 
-    Male,
-    Female,
-    Unspecified;
+    Male('M'),
+    Female('F'),
+    Unspecified('X');
 
+    /**
+     * The MRZ character.
+     */
+    public final char mrz;
+    
+    private MrzSex(char mrz) {
+        this.mrz = mrz;
+    }
+    
     public static MrzSex fromMrz(char sex) {
         switch (sex) {
             case 'M':
