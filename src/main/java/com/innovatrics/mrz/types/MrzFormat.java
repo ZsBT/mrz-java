@@ -24,10 +24,10 @@ import com.innovatrics.mrz.MrzRecord;
 import com.innovatrics.mrz.records.MRP;
 import com.innovatrics.mrz.records.MrtdTd1;
 import com.innovatrics.mrz.records.MrtdTd2;
-import com.innovatrics.mrz.records.Unknown2_34;
+import com.innovatrics.mrz.records.SlovakId2_34;
 
 /**
- * Lists all supported MRZ formats.
+ * Lists all supported MRZ formats. Note that the order of the enum constants are important.
  * @author Martin Vysny
  */
 public enum MrzFormat {
@@ -47,7 +47,7 @@ public enum MrzFormat {
     /**
      * Unknown 2 line/34 characters per line format, used with old Slovak ID cards.
      */
-    UNKNOWN234(2, 34, Unknown2_34.class);
+    SLOVAK_ID_234(2, 34, SlovakId2_34.class);
     public final int rows;
     public final int columns;
     private final Class<? extends MrzRecord> recordClass;

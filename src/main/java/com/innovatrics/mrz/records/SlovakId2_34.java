@@ -27,11 +27,11 @@ import com.innovatrics.mrz.types.MrzFormat;
  * Unknown 2 line/34 characters per line format, used with old Slovak ID cards.
  * @author Martin Vysny
  */
-public class Unknown2_34 extends MrzRecord {
+public class SlovakId2_34 extends MrzRecord {
     private static final long serialVersionUID = 1L;
 
-    public Unknown2_34() {
-        super(MrzFormat.UNKNOWN234);
+    public SlovakId2_34() {
+        super(MrzFormat.SLOVAK_ID_234);
     }
     /**
      * For use of the issuing State or 

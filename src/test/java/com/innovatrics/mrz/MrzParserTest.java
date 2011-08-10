@@ -18,7 +18,7 @@
  */
 package com.innovatrics.mrz;
 
-import com.innovatrics.mrz.records.Unknown2_34;
+import com.innovatrics.mrz.records.SlovakId2_34;
 import com.innovatrics.mrz.records.MrtdTd1;
 import com.innovatrics.mrz.records.MrtdTd2;
 import com.innovatrics.mrz.types.MrzDate;
@@ -84,7 +84,7 @@ public class MrzParserTest {
 
     @Test
     public void testUnknown234Parsing() {
-        final Unknown2_34 r = (Unknown2_34) MrzParser.parse("I<SVKNOVAK<<JAN<<<<<<<<<<<<<<<<<<<\n123456<AA5SVK8110251M1801020749313");
+        final SlovakId2_34 r = (SlovakId2_34) MrzParser.parse("I<SVKNOVAK<<JAN<<<<<<<<<<<<<<<<<<<\n123456<AA5SVK8110251M1801020749313");
         assertEquals(MrzDocumentCode.TypeI, r.code);
         assertEquals('I', r.code1);
         assertEquals('<', r.code2);
