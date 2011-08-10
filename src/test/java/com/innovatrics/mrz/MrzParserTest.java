@@ -102,19 +102,19 @@ public class MrzParserTest {
 
     @Test
     public void testFrenchIdCardParsing() {
-        final FrenchIdCard r = (FrenchIdCard) MrzParser.parse("IDFRANOVAK<<<<<<<<<<<<<<<12345678901\nABCDE12345126JAN<<<<<<<<<<<8110251M<\n");
+        final FrenchIdCard r = (FrenchIdCard) MrzParser.parse("IDFRAPETE<<<<<<<<<<<<<<<<<<<<<952042\n0509952018746NICOLAS<<PAUL<8206152M3\n");
         assertEquals(MrzDocumentCode.TypeI, r.code);
         assertEquals('I', r.code1);
         assertEquals('D', r.code2);
         assertEquals("FRA", r.issuingCountry);
         assertEquals("FRA", r.nationality);
-        assertEquals("12345678901", r.optional);
-        assertEquals("ABCDE1234512", r.documentNumber);
-//        assertEquals(new MrzDate(18, 1, 2), r.expirationDate);
-        assertEquals(new MrzDate(81, 10, 25), r.dateOfBirth);
+        assertEquals("050995201874", r.documentNumber);
+//        assertEquals(new MrzDate(95, 1, 2), r.expirationDate);
+        assertEquals("952042", r.optional);
+        assertEquals(new MrzDate(82, 6, 15), r.dateOfBirth);
         assertEquals(MrzSex.Male, r.sex);
-        assertEquals("NOVAK", r.surname);
-        assertEquals("JAN", r.givenNames);
+        assertEquals("PETE", r.surname);
+        assertEquals("NICOLAS, PAUL", r.givenNames);
     }
 
     @Test
@@ -122,14 +122,14 @@ public class MrzParserTest {
         final FrenchIdCard r = new FrenchIdCard();
         r.issuingCountry = "FRA";
         r.nationality = "FRA";
-        r.optional = "12345678901";
+        r.optional = "123456";
         r.documentNumber = "ABCDE1234512";
         r.expirationDate = new MrzDate(18, 1, 2);
         r.dateOfBirth = new MrzDate(81, 10, 25);
         r.sex = MrzSex.Male;
         r.surname = "NOVAK";
         r.givenNames = "JAN";
-        assertEquals("IDFRANOVAK<<<<<<<<<<<<<<<12345678901\nABCDE12345126JAN<<<<<<<<<<<8110251M<\n", r.toMrz());
+        assertEquals("IDFRANOVAK<<<<<<<<<<<<<<<<<<<<123456\nABCDE12345126JAN<<<<<<<<<<<8110251M<\n", r.toMrz());
     }
 
     @Test

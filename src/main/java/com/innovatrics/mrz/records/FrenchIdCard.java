@@ -25,7 +25,12 @@ import com.innovatrics.mrz.types.MrzDocumentCode;
 import com.innovatrics.mrz.types.MrzFormat;
 
 /**
- * Format used for French ID Cards
+ * Format used for French ID Cards.
+ * <p/>
+ * The structure of the card:
+ * 2 lines of 36 characters :
+<pre>First line : IDFRA{name}{many < to complete line}{6 numbers unknown}
+Second line : {card number on 12 numbers}{Check digit}{given names separated by "<<" and maybe troncated if too long}{date of birth YYMMDD}{Check digit}{sex M/F}{1 number unknown}</pre>
  * @author Pierrick Martin
  */
 public class FrenchIdCard extends MrzRecord {
@@ -40,9 +45,7 @@ public class FrenchIdCard extends MrzRecord {
     }
     /**
      * For use of the issuing State or 
-    organization. Unused character positions 
-    shall be completed with filler characters (&lt;)
-    repeated up to position 35 as required. 
+    organization.
      */
     public String optional;
 
@@ -52,11 +55,11 @@ public class FrenchIdCard extends MrzRecord {
         final MrzParser p = new MrzParser(mrz);
         //Special because surname and firstname not on the same line
         String[] name = new String[]{"", ""};
-        name[0] = p.parseString(new MrzRange(5, 25, 0));
+        name[0] = p.parseString(new MrzRange(5, 30, 0));
         name[1] = p.parseString(new MrzRange(13, 27, 1));
         setName(name);
         nationality = p.parseString(new MrzRange(2, 5, 0));
-        optional = p.parseString(new MrzRange(25, 36, 0));
+        optional = p.parseString(new MrzRange(30, 36, 0));
         documentNumber = p.parseString(new MrzRange(0, 12, 1));
         p.checkDigit(12, 1, new MrzRange(0, 12, 1), "document number");
         dateOfBirth = p.parseDate(new MrzRange(27, 33, 1));
@@ -75,8 +78,8 @@ public class FrenchIdCard extends MrzRecord {
     public String toMrz() {
         final StringBuilder sb = new StringBuilder("IDFRA");
         // first row
-        sb.append(MrzParser.toMrz(surname, 20));
-        sb.append(MrzParser.toMrz(optional, 11));
+        sb.append(MrzParser.toMrz(surname, 25));
+        sb.append(MrzParser.toMrz(optional, 6));
         sb.append('\n');
         // second row
         sb.append(MrzParser.toMrz(documentNumber, 12));
