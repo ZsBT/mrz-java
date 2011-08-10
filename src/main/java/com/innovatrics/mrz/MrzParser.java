@@ -21,6 +21,7 @@ package com.innovatrics.mrz;
 import com.innovatrics.mrz.types.MrzDate;
 import com.innovatrics.mrz.types.MrzFormat;
 import com.innovatrics.mrz.types.MrzSex;
+import java.text.Normalizer;
 
 /**
  * Parses the MRZ records.
@@ -208,6 +209,15 @@ public class MrzParser {
     }
 
     /**
+     * Computes MRZ check digit for given string of characters.
+     * @param str the string
+     * @return check digit in range of 0..9, inclusive. See <a href="http://www2.icao.int/en/MRTD/Downloads/Doc%209303/Doc%209303%20English/Doc%209303%20Part%203%20Vol%201.pdf">MRTD documentation</a> part 15 for details.
+     */
+    public static char computeCheckDigitChar(String str) {
+        return (char) ('0' + computeCheckDigit(str));
+    }
+
+    /**
      * Factory method, which parses the MRZ and returns appropriate record class.
      * @param mrz MRZ to parse.
      * @return record class.
@@ -216,5 +226,26 @@ public class MrzParser {
         final MrzRecord result = MrzFormat.get(mrz).newRecord();
         result.fromMrz(mrz);
         return result;
+    }
+
+    public static String toMrz(String string, int length) {
+        if (string == null) {
+            string = "";
+        }
+        string = deaccent(string).toUpperCase();
+        string = string.replaceAll("[ \n\t\f\r,]", "<");
+        if (string.length() > length) {
+            string = string.substring(0, length);
+        }
+        final StringBuilder sb = new StringBuilder(string);
+        while (sb.length() < length) {
+            sb.append('<');
+        }
+        return sb.toString();
+    }
+
+    private static String deaccent(String str) {
+        String n = Normalizer.normalize(str, Normalizer.Form.NFD);
+        return n.replaceAll("[^\\p{ASCII}]", "").toLowerCase();
     }
 }
