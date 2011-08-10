@@ -21,14 +21,15 @@ package com.innovatrics.mrz.types;
 import com.innovatrics.mrz.MrzParseException;
 import com.innovatrics.mrz.MrzRange;
 import com.innovatrics.mrz.MrzRecord;
+import com.innovatrics.mrz.records.FrenchIdCard;
 import com.innovatrics.mrz.records.MRP;
 import com.innovatrics.mrz.records.MrtdTd1;
 import com.innovatrics.mrz.records.MrtdTd2;
 import com.innovatrics.mrz.records.SlovakId2_34;
 
 /**
- * Lists all supported MRZ formats. Note that the order of the enum constants are important.
- * @author Martin Vysny
+ * Lists all supported MRZ formats. Note that the order of the enum constants are important, see for example {@link  #FRENCH_ID}.
+ * @author Martin Vysny, Pierrick Martin
  */
 public enum MrzFormat {
 
@@ -36,6 +37,20 @@ public enum MrzFormat {
      * MRTD td1 format: A three line long, 30 characters per line format.
      */
     MRTD_TD1(3, 30, MrtdTd1.class),
+    /**
+     * French 2 line/36 characters per line format, used with French ID cards.
+     * Need to be before {@link #MRTD_TD2} because of the same values for row/column.
+     * See below for the "if" test.
+     */
+    FRENCH_ID(2, 36, FrenchIdCard.class) {
+
+        public boolean isFormatOf(String[] mrzRows) {
+            if (!super.isFormatOf(mrzRows)) {
+                return false;
+            }
+            return mrzRows[0].substring(0, 5).equals("IDFRA");
+        }
+    },
     /**
      * MRTD td2 format: A two line long, 36 characters per line format.
      */
@@ -59,6 +74,15 @@ public enum MrzFormat {
     }
 
     /**
+     * Checks if this format is able to parse given serialized MRZ record.
+     * @param mrzRows MRZ record, separated into rows.
+     * @return true if given MRZ record is of this type, false otherwise.
+     */
+    public boolean isFormatOf(String[] mrzRows) {
+        return rows == mrzRows.length && columns == mrzRows[0].length();
+    }
+
+    /**
      * Detects given MRZ format.
      * @param mrz the MRZ string.
      * @return the format, never null.
@@ -72,7 +96,7 @@ public enum MrzFormat {
             }
         }
         for (final MrzFormat f : values()) {
-            if (f.rows == rows.length && f.columns == cols) {
+            if (f.isFormatOf(rows)) {
                 return f;
             }
         }
