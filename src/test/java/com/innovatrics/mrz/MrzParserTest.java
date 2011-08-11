@@ -18,6 +18,7 @@
  */
 package com.innovatrics.mrz;
 
+import com.innovatrics.mrz.records.MrvB;
 import com.innovatrics.mrz.records.MrvA;
 import com.innovatrics.mrz.records.FrenchIdCard;
 import com.innovatrics.mrz.records.SlovakId2_34;
@@ -171,5 +172,37 @@ public class MrzParserTest {
         r.surname = "NOVAK";
         r.givenNames = "JAN";
         assertEquals("V<FRANOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\nABCDE12346FRA8110251M1801020123456<<<<<<<<<<\n", r.toMrz());
+    }
+
+    @Test
+    public void testMrvVisaBCardParsing() {
+        final MrvB r = (MrvB) MrzParser.parse("V<FRANOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<\nABCDE12346FRA8110251M1801020123456<<\n");
+        assertEquals(MrzDocumentCode.TypeV, r.code);
+        assertEquals('V', r.code1);
+        assertEquals('<', r.code2);
+        assertEquals("FRA", r.issuingCountry);
+        assertEquals("FRA", r.nationality);
+        assertEquals("ABCDE1234", r.documentNumber);
+        assertEquals(new MrzDate(18, 1, 2), r.expirationDate);
+        assertEquals("123456", r.optional);
+        assertEquals(new MrzDate(81, 10, 25), r.dateOfBirth);
+        assertEquals(MrzSex.Male, r.sex);
+        assertEquals("NOVAK", r.surname);
+        assertEquals("JAN", r.givenNames);
+    }
+
+    @Test
+    public void testMrvVisaBMrz() {
+        final MrvB r = new MrvB();
+        r.issuingCountry = "FRA";
+        r.nationality = "FRA";
+        r.optional = "123456";
+        r.documentNumber = "ABCDE1234512";
+        r.expirationDate = new MrzDate(18, 1, 2);
+        r.dateOfBirth = new MrzDate(81, 10, 25);
+        r.sex = MrzSex.Male;
+        r.surname = "NOVAK";
+        r.givenNames = "JAN";
+        assertEquals("V<FRANOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<\nABCDE12346FRA8110251M1801020123456<<\n", r.toMrz());
     }
 }

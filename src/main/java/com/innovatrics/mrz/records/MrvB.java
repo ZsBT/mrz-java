@@ -66,6 +66,21 @@ public class MrvB extends MrzRecord {
 
     @Override
     public String toMrz() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final StringBuilder sb = new StringBuilder("V<");
+        sb.append(MrzParser.toMrz(issuingCountry, 3));
+        sb.append(MrzParser.nameToMrz(surname, givenNames, 31));
+        sb.append('\n');
+        // second line
+        sb.append(MrzParser.toMrz(documentNumber, 9));
+        sb.append(MrzParser.computeCheckDigitChar(MrzParser.toMrz(documentNumber, 9)));
+        sb.append(MrzParser.toMrz(nationality, 3));
+        sb.append(dateOfBirth.toMrz());
+        sb.append(MrzParser.computeCheckDigitChar(dateOfBirth.toMrz()));
+        sb.append(sex.mrz);
+        sb.append(expirationDate.toMrz());
+        sb.append(MrzParser.computeCheckDigitChar(expirationDate.toMrz()));
+        sb.append(MrzParser.toMrz(optional, 8));
+        sb.append('\n');
+        return sb.toString();
     }
 }
