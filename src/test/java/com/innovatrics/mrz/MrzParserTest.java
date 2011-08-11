@@ -134,7 +134,8 @@ public class MrzParserTest {
 
     @Test
     public void testToMrz() {
-        assertEquals("CACACA<<<<<", MrzParser.toMrz("čačača", 11));
+        // \u010d = č
+        assertEquals("CACACA<<<<<", MrzParser.toMrz("\u010da\u010da\u010da", 11));
         assertEquals("HERBERT<<FRANK<<<", MrzParser.toMrz("Herbert  Frank", 17));
     }
 }
