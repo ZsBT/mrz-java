@@ -53,6 +53,8 @@ public class MrzParserTest {
         assertEquals("PAT<<MAT", MrzParser.toMrz("Pat, Mat", 8));
         assertEquals("FOO<", MrzParser.toMrz("foo bar baz", 4));
         assertEquals("<<<<<<<<", MrzParser.toMrz("*$()&/\\", 8));
+        assertEquals("AEAEIJIJ", MrzParser.toMrz("\u00C4\u00E4\u0132\u0133", 8));
+        assertEquals("OEOE", MrzParser.toMrz("\u00D6\u00F6", 4));
     }
     
     @Test

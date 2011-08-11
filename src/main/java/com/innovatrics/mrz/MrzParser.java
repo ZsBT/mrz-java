@@ -22,6 +22,9 @@ import com.innovatrics.mrz.types.MrzDate;
 import com.innovatrics.mrz.types.MrzFormat;
 import com.innovatrics.mrz.types.MrzSex;
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Parses the MRZ records.
@@ -236,9 +239,42 @@ public class MrzParser {
         result.fromMrz(mrz);
         return result;
     }
+    private static final Map<String, String> EXPAND_CHARACTERS = new HashMap<String, String>();
+
+    static {
+        EXPAND_CHARACTERS.put("\u00C4", "AE"); // Ä
+        EXPAND_CHARACTERS.put("\u00E4", "AE"); // ä
+        EXPAND_CHARACTERS.put("\u00C5", "AA"); // Å
+        EXPAND_CHARACTERS.put("\u00E5", "AA"); // å
+        EXPAND_CHARACTERS.put("\u00C6", "AE"); // Æ
+        EXPAND_CHARACTERS.put("\u00E6", "AE"); // æ
+        EXPAND_CHARACTERS.put("\u0132", "IJ"); // Ĳ
+        EXPAND_CHARACTERS.put("\u0133", "IJ"); // ĳ
+        EXPAND_CHARACTERS.put("\u00D6", "OE"); // Ö
+        EXPAND_CHARACTERS.put("\u00F6", "OE"); // ö
+        EXPAND_CHARACTERS.put("\u00D8", "OE"); // Ø
+        EXPAND_CHARACTERS.put("\u00F8", "OE"); // ø
+        EXPAND_CHARACTERS.put("\u00DC", "UE"); // Ü
+        EXPAND_CHARACTERS.put("\u00FC", "UE"); // ü
+        EXPAND_CHARACTERS.put("\u00DF", "SS"); // ß
+    }
 
     /**
      * Converts given string to a MRZ string: removes all accents, converts the string to upper-case and replaces all spaces and invalid characters with '&lt;'.
+     * <p/>
+     * Several characters are expanded:
+     * <table border="1">
+     * <tr><th>Character</th><th>Expand to</th></tr>
+     * <tr><td>Ä</td><td>AE</td></tr>
+     * <tr><td>Å</td><td>AA</td></tr>
+     * <tr><td>Æ</td><td>AE</td></tr>
+     * <tr><td>Ĳ</td><td>IJ</td></tr>
+     * <tr><td>IJ</td><td>IJ</td></tr>
+     * <tr><td>Ö</td><td>OE</td></tr>
+     * <tr><td>Ø</td><td>OE</td></tr>
+     * <tr><td>Ü</td><td>UE</td></tr>
+     * <tr><td>ß</td><td>SS</td></tr>
+     * </table>
      * <p/>
      * Examples:<ul>
      * <li><code>toMrz("Sedím na konári", 20)</code> yields <code>"SEDIM&lt;NA&lt;KONARI&lt;&lt;&lt;&lt;&lt;"</code></li>
@@ -253,6 +289,9 @@ public class MrzParser {
     public static String toMrz(String string, int length) {
         if (string == null) {
             string = "";
+        }
+        for (final Map.Entry<String, String> e : EXPAND_CHARACTERS.entrySet()) {
+            string = string.replace(e.getKey(), e.getValue());
         }
         string = deaccent(string).toUpperCase();
         if (string.length() > length) {
