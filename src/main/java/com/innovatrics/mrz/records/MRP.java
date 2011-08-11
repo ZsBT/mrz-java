@@ -34,7 +34,7 @@ public class MRP extends MrzRecord {
         super(MrzFormat.PASSPORT);
     }
     /**
-     * personal number (may be used by the issuing country as it desires)
+     * personal number (may be used by the issuing country as it desires), 14 characters long.
      */
     public String personalNumber;
 
@@ -63,6 +63,24 @@ public class MRP extends MrzRecord {
 
     @Override
     public String toMrz() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // first line
+        final StringBuilder sb = new StringBuilder();
+        sb.append(code1);
+        sb.append(code2);
+        sb.append(MrzParser.toMrz(issuingCountry, 3));
+        sb.append(MrzParser.nameToMrz(surname, givenNames, 39));
+        sb.append('\n');
+        // second line
+        final String docNum = MrzParser.toMrz(documentNumber, 9) + MrzParser.computeCheckDigitChar(MrzParser.toMrz(documentNumber, 9));
+        sb.append(docNum);
+        sb.append(MrzParser.toMrz(nationality, 3));
+        final String dob = dateOfBirth.toMrz() + MrzParser.computeCheckDigitChar(dateOfBirth.toMrz());
+        sb.append(dob);
+        sb.append(sex.mrz);
+        final String edpn = expirationDate.toMrz() + MrzParser.computeCheckDigitChar(expirationDate.toMrz()) + MrzParser.toMrz(personalNumber, 14) + MrzParser.computeCheckDigitChar(MrzParser.toMrz(personalNumber, 14));
+        sb.append(edpn);
+        sb.append(MrzParser.computeCheckDigitChar(docNum + dob + edpn));
+        sb.append('\n');
+        return sb.toString();
     }
 }

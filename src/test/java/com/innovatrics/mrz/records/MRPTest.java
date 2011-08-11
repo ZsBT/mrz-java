@@ -25,19 +25,19 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Tests {@link SlovakId2_34}.
+ * Tests {@link FrenchIdCard}.
  * @author Martin Vysny
  */
-public class SlovakId2_34Test {
+public class MRPTest {
     @Test
-    public void testSlovakId234Parsing() {
-        final SlovakId2_34 r = (SlovakId2_34) MrzParser.parse("I<SVKNOVAK<<JAN<<<<<<<<<<<<<<<<<<<\n123456<AA5SVK8110251M1801020749313");
+    public void testParsing() {
+        final MRP r = (MRP) MrzParser.parse("I<SVKNOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n123456<AA5SVK8110251M1801020749313<<<<<<<<70\n");
         assertEquals(MrzDocumentCode.TypeI, r.code);
         assertEquals('I', r.code1);
         assertEquals('<', r.code2);
         assertEquals("SVK", r.issuingCountry);
         assertEquals("SVK", r.nationality);
-        assertEquals("749313", r.optional);
+        assertEquals("749313", r.personalNumber);
         assertEquals("123456 AA", r.documentNumber);
         assertEquals(new MrzDate(18, 1, 2), r.expirationDate);
         assertEquals(new MrzDate(81, 10, 25), r.dateOfBirth);
@@ -48,18 +48,18 @@ public class SlovakId2_34Test {
 
     @Test
     public void testToMrz() {
-        final SlovakId2_34 r = new SlovakId2_34();
+        final MRP r = new MRP();
         r.code1 = 'I';
         r.code2 = '<';
         r.issuingCountry = "SVK";
         r.nationality = "SVK";
-        r.optional = "749313";
+        r.personalNumber = "749313";
         r.documentNumber = "123456 AA";
         r.expirationDate = new MrzDate(18, 1, 2);
         r.dateOfBirth = new MrzDate(81, 10, 25);
         r.sex = MrzSex.Male;
         r.surname = "NOVAK";
         r.givenNames = "JAN";
-        assertEquals("I<SVKNOVAK<<JAN<<<<<<<<<<<<<<<<<<<\n123456<AA5SVK8110251M1801020749313\n", r.toMrz());
+        assertEquals("I<SVKNOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n123456<AA5SVK8110251M1801020749313<<<<<<<<70\n", r.toMrz());
     }
 }

@@ -64,6 +64,24 @@ public class SlovakId2_34 extends MrzRecord {
 
     @Override
     public String toMrz() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // first line
+        final StringBuilder sb = new StringBuilder();
+        sb.append(code1);
+        sb.append(code2);
+        sb.append(MrzParser.toMrz(issuingCountry, 3));
+        sb.append(MrzParser.nameToMrz(surname, givenNames, 29));
+        sb.append('\n');
+        // second line
+        sb.append(MrzParser.toMrz(documentNumber, 9));
+        sb.append(MrzParser.computeCheckDigitChar(MrzParser.toMrz(documentNumber, 9)));
+        sb.append(MrzParser.toMrz(nationality, 3));
+        sb.append(dateOfBirth.toMrz());
+        sb.append(MrzParser.computeCheckDigitChar(dateOfBirth.toMrz()));
+        sb.append(sex.mrz);
+        sb.append(expirationDate.toMrz());
+        sb.append(MrzParser.computeCheckDigitChar(expirationDate.toMrz()));
+        sb.append(MrzParser.toMrz(optional, 6));
+        sb.append('\n');
+        return sb.toString();
     }
 }
