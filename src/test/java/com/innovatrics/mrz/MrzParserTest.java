@@ -18,15 +18,7 @@
  */
 package com.innovatrics.mrz;
 
-import com.innovatrics.mrz.records.MrvB;
-import com.innovatrics.mrz.records.MrvA;
-import com.innovatrics.mrz.records.FrenchIdCard;
-import com.innovatrics.mrz.records.SlovakId2_34;
-import com.innovatrics.mrz.records.MrtdTd1;
-import com.innovatrics.mrz.records.MrtdTd2;
 import com.innovatrics.mrz.types.MrzDate;
-import com.innovatrics.mrz.types.MrzDocumentCode;
-import com.innovatrics.mrz.types.MrzSex;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -43,95 +35,14 @@ public class MrzParserTest {
     public void testComputeCheckDigit() {
         assertEquals(3, MrzParser.computeCheckDigit("520727"));
         assertEquals(2, MrzParser.computeCheckDigit("D231458907<<<<<<<<<<<<<<<34071279507122<<<<<<<<<<"));
+        assertEquals('3', MrzParser.computeCheckDigitChar("520727"));
+        assertEquals('2', MrzParser.computeCheckDigitChar("D231458907<<<<<<<<<<<<<<<34071279507122<<<<<<<<<<"));
     }
 
     @Test
     public void testDateParsing() {
-        assertEquals("050607", new MrzDate(5, 6, 7).toMrz());
-        assertEquals("420712", new MrzDate(42, 7, 12).toMrz());
-    }
-
-    @Test
-    public void testTd1Parsing() {
-        final MrtdTd1 r = (MrtdTd1) MrzParser.parse("CIUTOD231458907A123X5328434D23\n3407127M9507122UTO<<<<<<<<<<<6\nSTEVENSON<<PETER<<<<<<<<<<<<<<\n");
-        assertEquals(MrzDocumentCode.TypeC, r.code);
-        assertEquals('C', r.code1);
-        assertEquals('I', r.code2);
-        assertEquals("UTO", r.issuingCountry);
-        assertEquals("D23145890", r.documentNumber);
-        assertEquals("A123X5328434D23", r.optional);
-        assertEquals("", r.optional2);
-        assertEquals(new MrzDate(95, 7, 12), r.expirationDate);
-        assertEquals(new MrzDate(34, 7, 12), r.dateOfBirth);
-        assertEquals(MrzSex.Male, r.sex);
-        assertEquals("STEVENSON", r.surname);
-        assertEquals("PETER", r.givenNames);
-    }
-
-    @Test
-    public void testTd2Parsing() {
-        final MrtdTd2 r = (MrtdTd2) MrzParser.parse("I<UTOSTEVENSON<<PETER<<<<<<<<<<<<<<<\nD231458907UTO3407127M9507122<<<<<<<2");
-        assertEquals(MrzDocumentCode.TypeI, r.code);
-        assertEquals('I', r.code1);
-        assertEquals('<', r.code2);
-        assertEquals("UTO", r.issuingCountry);
-        assertEquals("UTO", r.nationality);
-        assertEquals("", r.optional);
-        assertEquals("D23145890", r.documentNumber);
-        assertEquals(new MrzDate(95, 7, 12), r.expirationDate);
-        assertEquals(new MrzDate(34, 7, 12), r.dateOfBirth);
-        assertEquals(MrzSex.Male, r.sex);
-        assertEquals("STEVENSON", r.surname);
-        assertEquals("PETER", r.givenNames);
-    }
-
-    @Test
-    public void testSlovakId234Parsing() {
-        final SlovakId2_34 r = (SlovakId2_34) MrzParser.parse("I<SVKNOVAK<<JAN<<<<<<<<<<<<<<<<<<<\n123456<AA5SVK8110251M1801020749313");
-        assertEquals(MrzDocumentCode.TypeI, r.code);
-        assertEquals('I', r.code1);
-        assertEquals('<', r.code2);
-        assertEquals("SVK", r.issuingCountry);
-        assertEquals("SVK", r.nationality);
-        assertEquals("749313", r.optional);
-        assertEquals("123456 AA", r.documentNumber);
-        assertEquals(new MrzDate(18, 1, 2), r.expirationDate);
-        assertEquals(new MrzDate(81, 10, 25), r.dateOfBirth);
-        assertEquals(MrzSex.Male, r.sex);
-        assertEquals("NOVAK", r.surname);
-        assertEquals("JAN", r.givenNames);
-    }
-
-    @Test
-    public void testFrenchIdCardParsing() {
-        final FrenchIdCard r = (FrenchIdCard) MrzParser.parse("IDFRAPETE<<<<<<<<<<<<<<<<<<<<<952042\n0509952018746NICOLAS<<PAUL<8206152M3\n");
-        assertEquals(MrzDocumentCode.TypeI, r.code);
-        assertEquals('I', r.code1);
-        assertEquals('D', r.code2);
-        assertEquals("FRA", r.issuingCountry);
-        assertEquals("FRA", r.nationality);
-        assertEquals("050995201874", r.documentNumber);
-//        assertEquals(new MrzDate(95, 1, 2), r.expirationDate);
-        assertEquals("952042", r.optional);
-        assertEquals(new MrzDate(82, 6, 15), r.dateOfBirth);
-        assertEquals(MrzSex.Male, r.sex);
-        assertEquals("PETE", r.surname);
-        assertEquals("NICOLAS, PAUL", r.givenNames);
-    }
-
-    @Test
-    public void testFrenchIdToMrz() {
-        final FrenchIdCard r = new FrenchIdCard();
-        r.issuingCountry = "FRA";
-        r.nationality = "FRA";
-        r.optional = "123456";
-        r.documentNumber = "ABCDE1234512";
-        r.expirationDate = new MrzDate(18, 1, 2);
-        r.dateOfBirth = new MrzDate(81, 10, 25);
-        r.sex = MrzSex.Male;
-        r.surname = "NOVAK";
-        r.givenNames = "JAN";
-        assertEquals("IDFRANOVAK<<<<<<<<<<<<<<<<<<<<123456\nABCDE12345126JAN<<<<<<<<<<<8110251M<\n", r.toMrz());
+        assertEquals(new MrzDate(34, 7, 12), new MrzParser("CIUTOD231458907A123X5328434D23\n3407127M9507122UTO<<<<<<<<<<<6\nSTEVENSON<<PETER<<<<<<<<<<<<<<\n").parseDate(new MrzRange(0,6,1)));
+        assertEquals(new MrzDate(95, 12, 1), new MrzParser("CIUTOD231458907A123X5328434D23\n3407127M9512012UTO<<<<<<<<<<<6\nSTEVENSON<<PETER<<<<<<<<<<<<<<\n").parseDate(new MrzRange(8,14,1)));
     }
 
     @Test
@@ -140,69 +51,5 @@ public class MrzParserTest {
         assertEquals("CACACA<<<<<", MrzParser.toMrz("\u010da\u010da\u010da", 11));
         assertEquals("HERBERT<<FRANK<<<", MrzParser.toMrz("Herbert  Frank", 17));
         assertEquals("HERBERT<<FRANK<<<", MrzParser.nameToMrz("Herbert", "Frank", 17));
-    }
-
-    @Test
-    public void testMrvVisaACardParsing() {
-        final MrvA r = (MrvA) MrzParser.parse("V<FRANOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\nABCDE12346FRA8110251M1801020123456<<<<<<<<<<\n");
-        assertEquals(MrzDocumentCode.TypeV, r.code);
-        assertEquals('V', r.code1);
-        assertEquals('<', r.code2);
-        assertEquals("FRA", r.issuingCountry);
-        assertEquals("FRA", r.nationality);
-        assertEquals("ABCDE1234", r.documentNumber);
-        assertEquals(new MrzDate(18, 1, 2), r.expirationDate);
-        assertEquals("123456", r.optional);
-        assertEquals(new MrzDate(81, 10, 25), r.dateOfBirth);
-        assertEquals(MrzSex.Male, r.sex);
-        assertEquals("NOVAK", r.surname);
-        assertEquals("JAN", r.givenNames);
-    }
-
-    @Test
-    public void testMrvVisaAMrz() {
-        final MrvA r = new MrvA();
-        r.issuingCountry = "FRA";
-        r.nationality = "FRA";
-        r.optional = "123456";
-        r.documentNumber = "ABCDE1234512";
-        r.expirationDate = new MrzDate(18, 1, 2);
-        r.dateOfBirth = new MrzDate(81, 10, 25);
-        r.sex = MrzSex.Male;
-        r.surname = "NOVAK";
-        r.givenNames = "JAN";
-        assertEquals("V<FRANOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\nABCDE12346FRA8110251M1801020123456<<<<<<<<<<\n", r.toMrz());
-    }
-
-    @Test
-    public void testMrvVisaBCardParsing() {
-        final MrvB r = (MrvB) MrzParser.parse("V<FRANOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<\nABCDE12346FRA8110251M1801020123456<<\n");
-        assertEquals(MrzDocumentCode.TypeV, r.code);
-        assertEquals('V', r.code1);
-        assertEquals('<', r.code2);
-        assertEquals("FRA", r.issuingCountry);
-        assertEquals("FRA", r.nationality);
-        assertEquals("ABCDE1234", r.documentNumber);
-        assertEquals(new MrzDate(18, 1, 2), r.expirationDate);
-        assertEquals("123456", r.optional);
-        assertEquals(new MrzDate(81, 10, 25), r.dateOfBirth);
-        assertEquals(MrzSex.Male, r.sex);
-        assertEquals("NOVAK", r.surname);
-        assertEquals("JAN", r.givenNames);
-    }
-
-    @Test
-    public void testMrvVisaBMrz() {
-        final MrvB r = new MrvB();
-        r.issuingCountry = "FRA";
-        r.nationality = "FRA";
-        r.optional = "123456";
-        r.documentNumber = "ABCDE1234512";
-        r.expirationDate = new MrzDate(18, 1, 2);
-        r.dateOfBirth = new MrzDate(81, 10, 25);
-        r.sex = MrzSex.Male;
-        r.surname = "NOVAK";
-        r.givenNames = "JAN";
-        assertEquals("V<FRANOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<\nABCDE12346FRA8110251M1801020123456<<\n", r.toMrz());
     }
 }
