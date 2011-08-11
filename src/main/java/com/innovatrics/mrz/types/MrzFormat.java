@@ -25,6 +25,8 @@ import com.innovatrics.mrz.records.FrenchIdCard;
 import com.innovatrics.mrz.records.MRP;
 import com.innovatrics.mrz.records.MrtdTd1;
 import com.innovatrics.mrz.records.MrtdTd2;
+import com.innovatrics.mrz.records.MrvA;
+import com.innovatrics.mrz.records.MrvB;
 import com.innovatrics.mrz.records.SlovakId2_34;
 
 /**
@@ -52,9 +54,37 @@ public enum MrzFormat {
         }
     },
     /**
+     * MRV type-B format: A two lines long, 36 characters per line format
+     * Need to be before {@link #MRTD_TD2} because of the same values for row/column.
+     * See below for the "if" test.
+     */
+    MRV_VISA_B(2, 36, MrvB.class) {
+
+        public boolean isFormatOf(String[] mrzRows) {
+            if (!super.isFormatOf(mrzRows)) {
+                return false;
+            }
+            return mrzRows[0].substring(0, 1).equals("V");
+        } 
+    },    
+    /**
      * MRTD td2 format: A two line long, 36 characters per line format.
      */
     MRTD_TD2(2, 36, MrtdTd2.class),
+    /**
+     * MRV type-A format: A two lines long, 44 characters per line format
+     * Need to be before {@link #PASSPORT} because of the same values for row/column.
+     * See below for the "if" test.
+     */
+    MRV_VISA_A(2, 44, MrvA.class) {
+
+        public boolean isFormatOf(String[] mrzRows) {
+            if (!super.isFormatOf(mrzRows)) {
+                return false;
+            }
+            return mrzRows[0].substring(0, 1).equals("V");
+        }
+    }, 
     /**
      * MRP Passport format: A two line long, 44 characters per line format.
      */
