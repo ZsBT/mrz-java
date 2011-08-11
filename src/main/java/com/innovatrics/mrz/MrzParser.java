@@ -293,6 +293,8 @@ public class MrzParser {
         for (final Map.Entry<String, String> e : EXPAND_CHARACTERS.entrySet()) {
             string = string.replace(e.getKey(), e.getValue());
         }
+        string = string.replace("’", "");
+        string = string.replace("'", "");
         string = deaccent(string).toUpperCase();
         if (string.length() > length) {
             string = string.substring(0, length);
