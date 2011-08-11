@@ -62,5 +62,6 @@ public class MrzParserTest {
     @Test
     public void testNameToMrz() {
         assertEquals("HERBERT<<FRANK<<<", MrzParser.nameToMrz("Herbert", "Frank", 17));
+        assertEquals("ERIKSSON<<ANNA<MARIA<<<", MrzParser.nameToMrz("Eriksson", "Anna, Maria", 23));
     }
 }

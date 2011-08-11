@@ -320,7 +320,7 @@ public class MrzParser {
      */
     public static String nameToMrz(String surname, String givenNames, int length) {
         // @TODO: this function does not yet properly shorten names - mvy: IMPLEMENT!
-        return toMrz(surname.trim() + "  " + givenNames.trim(), length);
+        return toMrz(surname.trim() + "  " + givenNames.trim().replace(", ", " "), length);
     }
 
     private static String deaccent(String str) {
