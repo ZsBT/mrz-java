@@ -50,6 +50,13 @@ public class MrzParserTest {
         // \u010d = č
         assertEquals("CACACA<<<<<", MrzParser.toMrz("\u010da\u010da\u010da", 11));
         assertEquals("HERBERT<<FRANK<<<", MrzParser.toMrz("Herbert  Frank", 17));
+        assertEquals("PAT<<MAT", MrzParser.toMrz("Pat, Mat", 8));
+        assertEquals("FOO<", MrzParser.toMrz("foo bar baz", 4));
+        assertEquals("<<<<<<<<", MrzParser.toMrz("*$()&/\\", 8));
+    }
+    
+    @Test
+    public void testNameToMrz() {
         assertEquals("HERBERT<<FRANK<<<", MrzParser.nameToMrz("Herbert", "Frank", 17));
     }
 }

@@ -57,7 +57,7 @@ public class MrzParser {
     /**
      * Parses the MRZ name in form of SURNAME&lt;&lt;FIRSTNAME&lt;
      * @param range the range
-     * @return array of [surname, first_name].
+     * @return array of [surname, first_name], never null, always with a length of 2.
      */
     public String[] parseName(MrzRange range) {
         checkValidCharacters(range);
@@ -182,6 +182,15 @@ public class MrzParser {
     }
     private static final int[] MRZ_WEIGHTS = new int[]{7, 3, 1};
 
+    /**
+     * Checks if given character is valid in MRZ.
+     * @param c the character.
+     * @return true if the character is valid, false otherwise.
+     */
+    private static boolean isValid(char c) {
+        return ((c == '<') || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z'));
+    }
+
     private static int getCharacterValue(char c) {
         if (c == '<') {
             return 0;
@@ -228,22 +237,46 @@ public class MrzParser {
         return result;
     }
 
+    /**
+     * Converts given string to a MRZ string: removes all accents, converts the string to upper-case and replaces all spaces and invalid characters with '&lt;'.
+     * <p/>
+     * Examples:<ul>
+     * <li><code>toMrz("Sedím na konári", 20)</code> yields <code>"SEDIM&lt;NA&lt;KONARI&lt;&lt;&lt;&lt;&lt;"</code></li>
+     * <li><code>toMrz("Pat, Mat", 8)</code> yields <code>"PAT&lt;&lt;MAT"</code></li>
+     * <li><code>toMrz("foo/bar baz", 4)</code> yields <code>"FOO&lt;"</code></li>
+     * <li><code>toMrz("*$()&/\", 8)</code> yields <code>"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;"</code></li>
+     * </ul>
+     * @param string the string to convert. Passing null is the same as passing in an empty string.
+     * @param length required length of the string. If given string is longer, it is truncated. If given string is shorter than given length, '&lt;' characters are appended at the end.
+     * @return MRZ-valid string.
+     */
     public static String toMrz(String string, int length) {
         if (string == null) {
             string = "";
         }
         string = deaccent(string).toUpperCase();
-        string = string.replaceAll("[ \n\t\f\r,]", "<");
         if (string.length() > length) {
             string = string.substring(0, length);
         }
         final StringBuilder sb = new StringBuilder(string);
+        for (int i = 0; i < sb.length(); i++) {
+            if (!isValid(sb.charAt(i))) {
+                sb.setCharAt(i, '<');
+            }
+        }
         while (sb.length() < length) {
             sb.append('<');
         }
         return sb.toString();
     }
 
+    /**
+     * Converts a surname and given names to a MRZ string as per TODO MRZ specification. TODO implement correctly
+     * @param surname the surname, not null.
+     * @param givenNames
+     * @param length
+     * @return 
+     */
     public static String nameToMrz(String surname, String givenNames, int length) {
         // @TODO: this function does not yet properly shorten names - mvy: IMPLEMENT!
         return toMrz(surname.trim() + "  " + givenNames.trim(), length);

@@ -34,7 +34,7 @@ public abstract class MrzRecord implements Serializable {
      */
     public MrzDocumentCode code;
     /**
-     * Document code, I, A, C or P.
+     * Document code, see {@link MrzDocumentCode} for details on allowed values.
      */
     public char code1;
     /**
@@ -43,7 +43,7 @@ public abstract class MrzRecord implements Serializable {
      */
     public char code2;
     /**
-     * An <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3</a> country code of issuing country, with additional allowed values (according to Wikipedia):
+     * An <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3</a> country code of issuing country, with additional allowed values (according to <a href="http://en.wikipedia.org/wiki/Machine-readable_passport">article on Wikipedia</a>):
      * <ul><li>D: Germany</li>
     <li>GBD: British dependent territories citizen(note: the country code of the overseas territory is presently used to indicate issuing authority and nationality of BOTC)</li>
     <li>GBN: British National (Overseas)</li>
@@ -89,6 +89,9 @@ public abstract class MrzRecord implements Serializable {
      * See {@link #issuingCountry} for additional allowed values.
      */
     public String nationality;
+    /**
+     * Detected MRZ format.
+     */
     public final MrzFormat format;
     
     protected MrzRecord(MrzFormat format) {
@@ -102,7 +105,7 @@ public abstract class MrzRecord implements Serializable {
 
     /**
      * Parses the MRZ record.
-     * @param mrz the mrz record.
+     * @param mrz the mrz record, not null, separated by \n
      * @throws MrzParseException when a problem occurs.
      */
     public void fromMrz(String mrz) throws MrzParseException {
@@ -114,6 +117,11 @@ public abstract class MrzRecord implements Serializable {
         code2 = mrz.charAt(1);
         issuingCountry = new MrzParser(mrz).parseString(new MrzRange(2, 5, 0));
     }
+    
+    /**
+     * Helper method to set the full name. Changes both {@link #surname} and {@link #givenNames}.
+     * @param name expected array of length 2, in the form of [surname, first_name]. Must not be null.
+     */
     protected final void setName(String[] name) {
         surname = name[0];
         givenNames = name[1];
@@ -121,7 +129,7 @@ public abstract class MrzRecord implements Serializable {
     
     /**
      * Serializes this record to a valid MRZ record.
-     * @return a valid MRZ record, not null.
+     * @return a valid MRZ record, not null, separated by \n
      */
     public abstract String toMrz();
 }

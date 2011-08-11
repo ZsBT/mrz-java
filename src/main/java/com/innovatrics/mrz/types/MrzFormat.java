@@ -41,7 +41,7 @@ public enum MrzFormat {
     MRTD_TD1(3, 30, MrtdTd1.class),
     /**
      * French 2 line/36 characters per line format, used with French ID cards.
-     * Need to be before {@link #MRTD_TD2} because of the same values for row/column.
+     * Need to occur before the {@link #MRTD_TD2} enum constant because of the same values for row/column.
      * See below for the "if" test.
      */
     FRENCH_ID(2, 36, FrenchIdCard.class) {
@@ -54,8 +54,8 @@ public enum MrzFormat {
         }
     },
     /**
-     * MRV type-B format: A two lines long, 36 characters per line format
-     * Need to be before {@link #MRTD_TD2} because of the same values for row/column.
+     * MRV type-B format: A two lines long, 36 characters per line format.
+     * Need to occur before the {@link #MRTD_TD2} enum constant because of the same values for row/column.
      * See below for the "if" test.
      */
     MRV_VISA_B(2, 36, MrvB.class) {
@@ -73,7 +73,7 @@ public enum MrzFormat {
     MRTD_TD2(2, 36, MrtdTd2.class),
     /**
      * MRV type-A format: A two lines long, 44 characters per line format
-     * Need to be before {@link #PASSPORT} because of the same values for row/column.
+     * Need to occur before {@link #PASSPORT} constant because of the same values for row/column.
      * See below for the "if" test.
      */
     MRV_VISA_A(2, 44, MrvA.class) {

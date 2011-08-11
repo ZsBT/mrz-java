@@ -60,6 +60,10 @@ public class MrzRange implements Serializable {
         return "" + column + "-" + columnTo + "," + row;
     }
 
+    /**
+     * Returns length of this range.
+     * @return number of characters, which this range covers.
+     */
     public int length() {
         return columnTo - column;
     }
