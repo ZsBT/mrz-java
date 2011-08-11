@@ -95,7 +95,7 @@ public class MrzParser {
         final String str = rawValue(range);
         for (int i = 0; i < str.length(); i++) {
             final char c = str.charAt(i);
-            if (c != '<' && (c < '0' || c > '9') && (c < 'A' || c > 'Z')) {
+            if (c != FILLER && (c < '0' || c > '9') && (c < 'A' || c > 'Z')) {
                 throw new MrzParseException("Invalid character in MRZ record: " + c, mrz, new MrzRange(range.column + i, range.column + i + 1, range.row), format);
             }
         }
@@ -112,7 +112,7 @@ public class MrzParser {
         while (str.endsWith("<")) {
             str = str.substring(0, str.length() - 1);
         }
-        return str.replace("<<", ", ").replace('<', ' ');
+        return str.replace("" + FILLER + FILLER, ", ").replace(FILLER, ' ');
     }
 
     /**
@@ -136,7 +136,7 @@ public class MrzParser {
     public void checkDigit(int col, int row, String str, String fieldName) {
         final char digit = (char) (computeCheckDigit(str) + '0');
         final char checkDigit = rows[row].charAt(col);
-        if (digit != checkDigit || (checkDigit != '<' && checkDigit != '0' && digit == '0')) {
+        if (digit != checkDigit || (checkDigit != FILLER && checkDigit != '0' && digit == '0')) {
             throw new MrzParseException("Check digit verification failed for " + fieldName + ": expected " + digit + " but got " + checkDigit, mrz, new MrzRange(col, col + 1, row), format);
         }
     }
@@ -191,11 +191,11 @@ public class MrzParser {
      * @return true if the character is valid, false otherwise.
      */
     private static boolean isValid(char c) {
-        return ((c == '<') || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z'));
+        return ((c == FILLER) || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z'));
     }
 
     private static int getCharacterValue(char c) {
-        if (c == '<') {
+        if (c == FILLER) {
             return 0;
         }
         if (c >= '0' && c <= '9') {
@@ -283,7 +283,7 @@ public class MrzParser {
      * <li><code>toMrz("*$()&/\", 8)</code> yields <code>"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;"</code></li>
      * </ul>
      * @param string the string to convert. Passing null is the same as passing in an empty string.
-     * @param length required length of the string. If given string is longer, it is truncated. If given string is shorter than given length, '&lt;' characters are appended at the end.
+     * @param length required length of the string. If given string is longer, it is truncated. If given string is shorter than given length, '&lt;' characters are appended at the end. If -1, the string is neither truncated nor enlarged.
      * @return MRZ-valid string.
      */
     public static String toMrz(String string, int length) {
@@ -296,31 +296,109 @@ public class MrzParser {
         string = string.replace("’", "");
         string = string.replace("'", "");
         string = deaccent(string).toUpperCase();
-        if (string.length() > length) {
+        if (length >= 0 && string.length() > length) {
             string = string.substring(0, length);
         }
         final StringBuilder sb = new StringBuilder(string);
         for (int i = 0; i < sb.length(); i++) {
             if (!isValid(sb.charAt(i))) {
-                sb.setCharAt(i, '<');
+                sb.setCharAt(i, FILLER);
             }
         }
         while (sb.length() < length) {
-            sb.append('<');
+            sb.append(FILLER);
         }
         return sb.toString();
     }
 
+    private static boolean isBlank(String str) {
+        return str == null || str.trim().length() == 0;
+    }
+
     /**
-     * Converts a surname and given names to a MRZ string as per TODO MRZ specification. TODO implement correctly
-     * @param surname the surname, not null.
-     * @param givenNames
-     * @param length
-     * @return name, properly converted to MRZ format of SURNAME&lt;&lt;GIVENNAMES&lt;...
+     * Converts a surname and given names to a MRZ string, shortening them as per Doc 9303 Part 3 Vol 1 Section 6.7 of the MRZ specification when necessary.
+     * @param surname the surname, not blank.
+     * @param givenNames given names, not blank.
+     * @param length required length of the string. If given string is longer, it is shortened. If given string is shorter than given length, '&lt;' characters are appended at the end.
+     * @return name, properly converted to MRZ format of SURNAME&lt;&lt;GIVENNAMES&lt;..., with the exact length of given length.
      */
     public static String nameToMrz(String surname, String givenNames, int length) {
-        // @TODO: this function does not yet properly shorten names - mvy: IMPLEMENT!
-        return toMrz(surname.trim() + "  " + givenNames.trim().replace(", ", " "), length);
+        if (isBlank(surname)) {
+            throw new IllegalArgumentException("Parameter surname: invalid value " + surname + ": blank");
+        }
+        if (isBlank(givenNames)) {
+            throw new IllegalArgumentException("Parameter givenNames: invalid value " + givenNames + ": blank");
+        }
+        if (length <= 0) {
+            throw new IllegalArgumentException("Parameter length: invalid value " + length + ": not positive");
+        }
+        surname = surname.replace(", ", " ");
+        givenNames = givenNames.replace(", ", " ");
+        final String[] surnames = surname.trim().split("[ \n\t\f\r]+");
+        final String[] given = givenNames.trim().split("[ \n\t\f\r]+");
+        for (int i = 0; i < surnames.length; i++) {
+            surnames[i] = toMrz(surnames[i], -1);
+        }
+        for (int i = 0; i < given.length; i++) {
+            given[i] = toMrz(given[i], -1);
+        }
+        // truncate
+        int nameSize = getNameSize(surnames, given);
+        String[] currentlyTruncating = given;
+        int currentlyTruncatingIndex = given.length - 1;
+        while (nameSize > length) {
+            final String ct = currentlyTruncating[currentlyTruncatingIndex];
+            final int ctsize = ct.length();
+            if (nameSize - ctsize + 1 <= length) {
+                currentlyTruncating[currentlyTruncatingIndex] = ct.substring(0, ctsize - (nameSize - length));
+            } else {
+                currentlyTruncating[currentlyTruncatingIndex] = ct.substring(0, 1);
+                currentlyTruncatingIndex--;
+                if (currentlyTruncatingIndex < 0) {
+                    if (currentlyTruncating == surnames) {
+                        throw new IllegalArgumentException("Cannot truncate name " + surname + " " + givenNames + ": length too small: " + length + "; truncated to " + toName(surnames, given));
+                    }
+                    currentlyTruncating = surnames;
+                    currentlyTruncatingIndex = currentlyTruncating.length - 1;
+                }
+            }
+            nameSize = getNameSize(surnames, given);
+        }
+        return toMrz(toName(surnames, given), length);
+    }
+    /**
+     * The filler character, '&lt;'.
+     */
+    public static final char FILLER = '<';
+
+    private static String toName(String[] surnames, String[] given) {
+        final StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (String s : surnames) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append(FILLER);
+            }
+            sb.append(s);
+        }
+        sb.append(FILLER);
+        for (String s : given) {
+            sb.append(FILLER);
+            sb.append(s);
+        }
+        return sb.toString();
+    }
+
+    private static int getNameSize(final String[] surnames, final String[] given) {
+        int result = 0;
+        for (String s : surnames) {
+            result += s.length() + 1;
+        }
+        for (String s : given) {
+            result += s.length() + 1;
+        }
+        return result;
     }
 
     private static String deaccent(String str) {
