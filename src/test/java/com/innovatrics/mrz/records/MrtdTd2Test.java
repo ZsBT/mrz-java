@@ -45,4 +45,21 @@ public class MrtdTd2Test {
         assertEquals("STEVENSON", r.surname);
         assertEquals("PETER", r.givenNames);
     }
+    
+    @Test
+    public void testToMrz() {
+        final MrtdTd2 r = new MrtdTd2();
+        r.code1 = 'I';
+        r.code2 = '<';
+        r.issuingCountry = "UTO";
+        r.nationality = "UTO";
+        r.optional = "";
+        r.documentNumber = "D23145890";
+        r.expirationDate = new MrzDate(95, 7, 12);
+        r.dateOfBirth = new MrzDate(34, 7, 12);
+        r.sex = MrzSex.Male;
+        r.surname = "STEVENSON";
+        r.givenNames = "PETER";
+        assertEquals("I<UTOSTEVENSON<<PETER<<<<<<<<<<<<<<<\nD231458907UTO3407127M9507122<<<<<<<2\n", r.toMrz());
+    }
 }

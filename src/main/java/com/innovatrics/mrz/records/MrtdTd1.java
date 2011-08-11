@@ -70,6 +70,27 @@ public class MrtdTd1 extends MrzRecord {
 
     @Override
     public String toMrz() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // first line
+        final StringBuilder sb = new StringBuilder();
+        sb.append(code1);
+        sb.append(code2);
+        sb.append(MrzParser.toMrz(issuingCountry, 3));
+        final String dno = MrzParser.toMrz(documentNumber, 9) + MrzParser.computeCheckDigitChar(MrzParser.toMrz(documentNumber, 9)) + MrzParser.toMrz(optional, 15);
+        sb.append(dno);
+        sb.append('\n');
+        // second line
+        final String dob = dateOfBirth.toMrz() + MrzParser.computeCheckDigitChar(dateOfBirth.toMrz());
+        sb.append(dob);
+        sb.append(sex.mrz);
+        final String ed = expirationDate.toMrz() + MrzParser.computeCheckDigitChar(expirationDate.toMrz());
+        sb.append(ed);
+        sb.append(MrzParser.toMrz(nationality, 3));
+        sb.append(MrzParser.toMrz(optional2, 11));
+        sb.append(MrzParser.computeCheckDigitChar(dno + dob + ed + MrzParser.toMrz(optional2, 11)));
+        sb.append('\n');
+        // third line
+        sb.append(MrzParser.nameToMrz(surname, givenNames, 30));
+        sb.append('\n');
+        return sb.toString();
     }
 }

@@ -71,7 +71,7 @@ public class FrenchIdCard extends MrzRecord {
 
     @Override
     public String toString() {
-        return "FrenchCard{" + super.toString() + ", optional=" + optional + '}';
+        return "FrenchIdCard{" + super.toString() + ", optional=" + optional + '}';
     }
 
     @Override
