@@ -31,19 +31,19 @@ import static org.junit.Assert.*;
 public class MrvATest {
     @Test
     public void testMrvVisaACardParsing() {
-        final MrvA r = (MrvA) MrzParser.parse("V<FRANOVAK<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\nABCDE12346FRA8110251M1801020123456<<<<<<<<<<\n");
+        final MrvA r = (MrvA) MrzParser.parse("V<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<\nL898902C<3UTO6908061F9406236ZE184226B<<<<<<<\n");
         assertEquals(MrzDocumentCode.TypeV, r.code);
         assertEquals('V', r.code1);
         assertEquals('<', r.code2);
-        assertEquals("FRA", r.issuingCountry);
-        assertEquals("FRA", r.nationality);
-        assertEquals("ABCDE1234", r.documentNumber);
-        assertEquals(new MrzDate(18, 1, 2), r.expirationDate);
-        assertEquals("123456", r.optional);
-        assertEquals(new MrzDate(81, 10, 25), r.dateOfBirth);
-        assertEquals(MrzSex.Male, r.sex);
-        assertEquals("NOVAK", r.surname);
-        assertEquals("JAN", r.givenNames);
+        assertEquals("UTO", r.issuingCountry);
+        assertEquals("UTO", r.nationality);
+        assertEquals("L898902C", r.documentNumber);
+        assertEquals(new MrzDate(94, 6, 23), r.expirationDate);
+        assertEquals("ZE184226B", r.optional);
+        assertEquals(new MrzDate(69, 8, 6), r.dateOfBirth);
+        assertEquals(MrzSex.Female, r.sex);
+        assertEquals("ERIKSSON", r.surname);
+        assertEquals("ANNA MARIA", r.givenNames);
     }
 
     @Test
