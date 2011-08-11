@@ -21,6 +21,7 @@ package com.innovatrics.mrz.records;
 import com.innovatrics.mrz.MrzParser;
 import com.innovatrics.mrz.MrzRange;
 import com.innovatrics.mrz.MrzRecord;
+import com.innovatrics.mrz.types.MrzDocumentCode;
 import com.innovatrics.mrz.types.MrzFormat;
 
 /**
@@ -33,6 +34,9 @@ public class MrvB extends MrzRecord {
 
     public MrvB() {
         super(MrzFormat.MRV_VISA_B);
+        code1 = 'V';
+        code2 = '<';
+        code = MrzDocumentCode.TypeV;
     }
     /**
      * Optional data at the discretion of the issuing State

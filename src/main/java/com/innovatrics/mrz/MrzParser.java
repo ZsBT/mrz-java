@@ -244,6 +244,11 @@ public class MrzParser {
         return sb.toString();
     }
 
+    public static String nameToMrz(String surname, String givenNames, int length) {
+        // @TODO: this function does not yet properly shorten names - mvy: IMPLEMENT!
+        return toMrz(surname.trim() + "  " + givenNames.trim(), length);
+    }
+
     private static String deaccent(String str) {
         String n = Normalizer.normalize(str, Normalizer.Form.NFD);
         return n.replaceAll("[^\\p{ASCII}]", "").toLowerCase();

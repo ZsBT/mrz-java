@@ -21,6 +21,7 @@ package com.innovatrics.mrz.records;
 import com.innovatrics.mrz.MrzParser;
 import com.innovatrics.mrz.MrzRange;
 import com.innovatrics.mrz.MrzRecord;
+import com.innovatrics.mrz.types.MrzDocumentCode;
 import com.innovatrics.mrz.types.MrzFormat;
 
 /**
@@ -33,6 +34,9 @@ public class MrvA extends MrzRecord {
 
     public MrvA() {
         super(MrzFormat.MRV_VISA_A);
+        code1 = 'V';
+        code2 = '<';
+        code = MrzDocumentCode.TypeV;
     }
     /**
      * Optional data at the discretion of the issuing State
@@ -62,6 +66,22 @@ public class MrvA extends MrzRecord {
 
     @Override
     public String toMrz() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // first line
+        final StringBuilder sb = new StringBuilder("V<");
+        sb.append(MrzParser.toMrz(issuingCountry, 3));
+        sb.append(MrzParser.nameToMrz(surname, givenNames, 39));
+        sb.append('\n');
+        // second line
+        sb.append(MrzParser.toMrz(documentNumber, 9));
+        sb.append(MrzParser.computeCheckDigitChar(MrzParser.toMrz(documentNumber, 9)));
+        sb.append(MrzParser.toMrz(nationality, 3));
+        sb.append(dateOfBirth.toMrz());
+        sb.append(MrzParser.computeCheckDigitChar(dateOfBirth.toMrz()));
+        sb.append(sex.mrz);
+        sb.append(expirationDate.toMrz());
+        sb.append(MrzParser.computeCheckDigitChar(expirationDate.toMrz()));
+        sb.append(MrzParser.toMrz(optional, 16));
+        sb.append('\n');
+        return sb.toString();
     }
 }
