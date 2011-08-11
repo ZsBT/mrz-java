@@ -314,7 +314,7 @@ public class MrzParser {
      * @param surname the surname, not null.
      * @param givenNames
      * @param length
-     * @return 
+     * @return name, properly converted to MRZ format of SURNAME&lt;&lt;GIVENNAMES&lt;...
      */
     public static String nameToMrz(String surname, String givenNames, int length) {
         // @TODO: this function does not yet properly shorten names - mvy: IMPLEMENT!
