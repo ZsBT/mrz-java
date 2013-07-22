@@ -30,8 +30,8 @@ import com.innovatrics.mrz.types.MrzFormat;
  * The structure of the card:
  * 2 lines of 36 characters :
 <pre>First line : IDFRA{name}{many < to complete line}{6 numbers unknown}
-Second line : {card number on 12 numbers}{Check digit}{given names separated by "<<" and maybe troncated if too long}{date of birth YYMMDD}{Check digit}{sex M/F}{1 number unknown}</pre>
- * @author Pierrick Martin
+Second line : {card number on 12 numbers}{Check digit}{given names separated by "<<" and maybe troncated if too long}{date of birth YYMMDD}{Check digit}{sex M/F}{1 number checksum}</pre>
+ * @author Pierrick Martin, Marin Moulinier
  */
 public class FrenchIdCard extends MrzRecord {
 
@@ -65,7 +65,8 @@ public class FrenchIdCard extends MrzRecord {
         dateOfBirth = p.parseDate(new MrzRange(27, 33, 1));
         p.checkDigit(33, 1, new MrzRange(27, 33, 1), "date of birth");
         sex = p.parseSex(34, 1);
-        // TODO last character is probably a checksum of multiple fields
+        final String finalChecksum = mrz.toString().replace("\n","").substring(0, 36 + 35);
+        p.checkDigit(35, 1, finalChecksum, "final checksum");
         // TODO expirationDate is missing
     }
 
@@ -88,8 +89,7 @@ public class FrenchIdCard extends MrzRecord {
         sb.append(dateOfBirth.toMrz());
         sb.append(MrzParser.computeCheckDigitChar(dateOfBirth.toMrz()));
         sb.append(sex.mrz);
-        // TODO last character is probably a checksum of multiple fields
-        sb.append('<');
+        sb.append(MrzParser.computeCheckDigitChar(sb.toString().replace("\n","")));
         sb.append('\n');
         return sb.toString();
     }

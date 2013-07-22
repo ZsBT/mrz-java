@@ -58,6 +58,6 @@ public class FrenchIdCardTest {
         r.sex = MrzSex.Male;
         r.surname = "NOVAK";
         r.givenNames = "JAN";
-        assertEquals("IDFRANOVAK<<<<<<<<<<<<<<<<<<<<123456\nABCDE12345126JAN<<<<<<<<<<<8110251M<\n", r.toMrz());
+        assertEquals("IDFRANOVAK<<<<<<<<<<<<<<<<<<<<123456\nABCDE12345126JAN<<<<<<<<<<<8110251M8\n", r.toMrz());
     }
 }
