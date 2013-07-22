@@ -34,9 +34,9 @@
         <url>http://www.innovatrics.com</url>
     </organization>
     <scm>
-		<connection>scm:hg:https://mrz-java.googlecode.com/hg/</connection>
-		<developerConnection>scm:hg:https://mrz-java.googlecode.com/hg/</developerConnection>
-		<url>https://mrz-java.googlecode.com/hg/</url>
+        <connection>scm:hg:https://mrz-java.googlecode.com/hg/</connection>
+        <developerConnection>scm:hg:https://mrz-java.googlecode.com/hg/</developerConnection>
+        <url>https://mrz-java.googlecode.com/hg/</url>
     </scm>
     <issueManagement>
         <system>GoogleCode</system>
@@ -116,14 +116,14 @@
                     </execution>
                 </executions>
             </plugin>
-			<plugin>
-				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<username>${google-code.hg.username}</username>
-					<password>${google-code.hg.password}</password>
-				</configuration>
-			</plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <username>${google-code.hg.username}</username>
+                    <password>${google-code.hg.password}</password>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
