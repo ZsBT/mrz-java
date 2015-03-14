@@ -21,12 +21,12 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.innovatrics.mrz</groupId>
+    <groupId>com.innovatrics.mrz</groupId>
     <artifactId>mrz-java</artifactId>
     <packaging>jar</packaging>
     <version>0.5-SNAPSHOT</version>
     <name>MRZ Java Parser</name>
-    <url>http://code.google.com/p/mrz-java/</url>
+    <url>https://github.com/mvysny/mrz-java</url>
     <inceptionYear>2011</inceptionYear>
     <description>Provides Java MRZ parser</description>
     <organization>
@@ -34,13 +34,11 @@
         <url>http://www.innovatrics.com</url>
     </organization>
     <scm>
-        <connection>scm:hg:https://mrz-java.googlecode.com/hg/</connection>
-        <developerConnection>scm:hg:https://mrz-java.googlecode.com/hg/</developerConnection>
-        <url>https://mrz-java.googlecode.com/hg/</url>
+        <connection>scm:hg:ssh://git@github.com/mvysny/mrz-java</connection>
     </scm>
     <issueManagement>
-        <system>GoogleCode</system>
-        <url>http://code.google.com/p/mrz-java/issues/list</url>
+        <system>Github</system>
+        <url>https://github.com/mvysny/mrz-java/issues</url>
     </issueManagement>
     <distributionManagement>
         <repository>
@@ -120,8 +118,6 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <username>${google-code.hg.username}</username>
-                    <password>${google-code.hg.password}</password>
                 </configuration>
             </plugin>
         </plugins>
