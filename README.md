@@ -15,7 +15,7 @@ System.out.println("Name: " + record.givenNames + " " + record.surname);
 ## Usage with Maven 2/3
 
 Add the baka.sk maven 2 repo to your maven installation - edit `~/.m2/settings.xml` so that it will look like the following:
-```
+```xml
 <settings>
  <profiles>
   <profile>
@@ -35,7 +35,7 @@ Add the baka.sk maven 2 repo to your maven installation - edit `~/.m2/settings.x
 
 Then add the following to your dependencies:
 
-```
+```xml
 <dependency>
  <groupId>com.innovatrics.mrz</groupId>
  <artifactId>mrz-java</artifactId>
