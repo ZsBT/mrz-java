@@ -12,7 +12,7 @@ final MrzRecord record = MrzParser.parse("I<UTOSTEVENSON<<PETER<<<<<<<<<<<<<<<\n
 System.out.println("Name: " + record.givenNames + " " + record.surname);
 ```
 
-## Usage with Maven 2/3 ===
+## Usage with Maven 2/3
 
 Add the baka.sk maven 2 repo to your maven installation - edit `~/.m2/settings.xml` so that it will look like the following:
 ```
