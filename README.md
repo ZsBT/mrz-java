@@ -37,11 +37,13 @@ Then add the following to your dependencies:
 
 ```xml
 <dependency>
- <groupId>com.innovatrics.mrz</groupId>
+ <groupId>org.innovatrics.mrz</groupId>
  <artifactId>mrz-java</artifactId>
  <version>0.4</version>
 </dependency>
 ```
+
+NOTE: use `com.innovatrics.mrz` for versions higher than 0.4.
 
 ## Changelog
 
