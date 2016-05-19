@@ -88,6 +88,10 @@
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9</version>
+<!-- Fixes compilation issue on Java 8 -->
+      <configuration>
+        <additionalparam>-Xdoclint:none</additionalparam>
+      </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
