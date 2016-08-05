@@ -50,7 +50,11 @@ public enum MrzDocumentCode {
     /**
      * Type V (Visa).
      */
-    TypeV;
+    TypeV,
+    /**
+     *
+     */
+    Migrant;
 
     public static MrzDocumentCode parse(String mrz) {
         final String code = mrz.substring(0, 2);
@@ -74,6 +78,9 @@ public enum MrzDocumentCode {
         }
         if (code.charAt(0) == 'V') {
             return TypeV;
+        }
+        if (code.equals("ME")) {
+            return Migrant;
         }
         throw new MrzParseException("Invalid document code: " + code, mrz, new MrzRange(0, 2, 0), null);
     }
