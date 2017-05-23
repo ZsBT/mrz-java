@@ -98,7 +98,7 @@ public abstract class MrzRecord implements Serializable {
 
 
     /**
-     * érvényes check digit
+     * check digit is valid or not
      */
     public boolean validCheckdigit = true;
 
