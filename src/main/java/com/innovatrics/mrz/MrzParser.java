@@ -18,6 +18,8 @@
  */
 package com.innovatrics.mrz;
 
+import android.util.Log;
+
 import com.innovatrics.mrz.types.MrzDate;
 import com.innovatrics.mrz.types.MrzFormat;
 import com.innovatrics.mrz.types.MrzSex;
@@ -134,12 +136,16 @@ public class MrzParser {
      * @param fieldName (optional) field name. Used only when {@link MrzParseException} is thrown.
      */
     public void checkDigit(int col, int row, String str, String fieldName) {
+        validCheckdigit = true;
         final char digit = (char) (computeCheckDigit(str) + '0');
         final char checkDigit = rows[row].charAt(col);
         if (digit != checkDigit || (checkDigit != FILLER && checkDigit != '0' && digit == '0')) {
-            throw new MrzParseException("Check digit verification failed for " + fieldName + ": expected " + digit + " but got " + checkDigit, mrz, new MrzRange(col, col + 1, row), format);
+            validCheckdigit = false;
+            //throw new MrzParseException ..
+            System.out.println("Check digit verification failed for " + fieldName + ": expected " + digit + " but got " + checkDigit);//, mrz, new MrzRange(col, col + 1, row), format);
         }
     }
+    public static boolean validCheckdigit = true;
 
     /**
      * Parses MRZ date.
@@ -237,6 +243,7 @@ public class MrzParser {
     public static MrzRecord parse(String mrz) {
         final MrzRecord result = MrzFormat.get(mrz).newRecord();
         result.fromMrz(mrz);
+        result.validCheckdigit = validCheckdigit;
         return result;
     }
     private static final Map<String, String> EXPAND_CHARACTERS = new HashMap<String, String>();

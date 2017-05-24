@@ -29,6 +29,8 @@ import java.io.Serializable;
  * @author Martin Vysny
  */
 public abstract class MrzRecord implements Serializable {
+
+
     /**
      * The document code.
      */
@@ -93,14 +95,22 @@ public abstract class MrzRecord implements Serializable {
      * Detected MRZ format.
      */
     public final MrzFormat format;
-    
+
+
+    /**
+     * check digit is valid or not
+     */
+    public boolean validCheckdigit = true;
+
     protected MrzRecord(MrzFormat format) {
         this.format = format;
     }
 
     @Override
     public String toString() {
-        return "MrzRecord{" + "code=" + code + "[" + code1 + code2 + "], issuingCountry=" + issuingCountry + ", documentNumber=" + documentNumber + ", surname=" + surname + ", givenNames=" + givenNames + ", dateOfBirth=" + dateOfBirth + ", sex=" + sex + ", expirationDate=" + expirationDate + ", nationality=" + nationality + '}';
+        return "MrzRecord{" + "code=" + code + "[" + code1 + code2 + "], issuingCountry=" + issuingCountry + ", documentNumber=" + documentNumber
+                + ", surname=" + surname + ", givenNames=" + givenNames + ", dateOfBirth=" + dateOfBirth + ", sex=" + sex + ", expirationDate="
+                + expirationDate + ", nationality=" + nationality + '}';
     }
 
     /**
