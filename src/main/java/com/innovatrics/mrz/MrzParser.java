@@ -138,11 +138,11 @@ public class MrzParser {
     public void checkDigit(int col, int row, String str, String fieldName) {
         validCheckdigit = true;
         final char digit = (char) (computeCheckDigit(str) + '0');
-        final char checkDigit = rows[row].charAt(col);
-        if (digit != checkDigit || (checkDigit != FILLER && checkDigit != '0' && digit == '0')) {
+        char checkDigit = rows[row].charAt(col);
+        if(checkDigit=='<')checkDigit = '0';
+        if ( digit != checkDigit || (checkDigit != FILLER && checkDigit != '0' && digit == '0') ) {
             validCheckdigit = false;
-            //throw new MrzParseException ..
-            System.out.println("Check digit verification failed for " + fieldName + ": expected " + digit + " but got " + checkDigit);//, mrz, new MrzRange(col, col + 1, row), format);
+            System.out.println("Check digit verification failed for " + fieldName + ": expected " + digit + " but got " + checkDigit);
         }
     }
     public static boolean validCheckdigit = true;
