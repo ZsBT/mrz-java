@@ -96,11 +96,10 @@ public abstract class MrzRecord implements Serializable {
      */
     public final MrzFormat format;
 
-
     /**
-     * check digit is valid or not
+     * If the check digit validation fails, this will contain the location.
      */
-    public boolean validCheckdigit = true;
+    public MrzRange invalidCheckdigit = null;
 
     protected MrzRecord(MrzFormat format) {
         this.format = format;

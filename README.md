@@ -2,6 +2,10 @@
 
 Machine-Readable Zone (MRZ, see http://en.wikipedia.org/wiki/Machine-readable_passport ) parser for Java, as defined by ICAO: http://www.icao.int/
 
+## NO LONGER MAINTAINED
+
+I no longer have any time to maintain the project - I will not fix any bugs and answer any further mails. Just fork this repo and mail me at vysny@baka.sk that you want to maintain the project.
+I'll then delete this git repository. Thank you.
 
 ## Example
 
