@@ -47,15 +47,15 @@ public class MrtdTd2 extends MrzRecord {
         final MrzParser p = new MrzParser(mrz);
         setName(p.parseName(new MrzRange(5, 36, 0)));
         documentNumber = p.parseString(new MrzRange(0, 9, 1));
-        p.checkDigit(9, 1, new MrzRange(0, 9, 1), "document number");
+        validDocumentNumber = p.checkDigit(9, 1, new MrzRange(0, 9, 1), "document number");
         nationality = p.parseString(new MrzRange(10, 13, 1));
         dateOfBirth = p.parseDate(new MrzRange(13, 19, 1));
-        p.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth");
+        validDateOfBirth = p.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth");
         sex = p.parseSex(20, 1);
         expirationDate = p.parseDate(new MrzRange(21, 27, 1));
-        p.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date");
+        validExpirationDate = p.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date");
         optional = p.parseString(new MrzRange(28, 35, 1));
-        p.checkDigit(35, 1, p.rawValue(new MrzRange(0, 10, 1), new MrzRange(13, 20, 1), new MrzRange(21, 35, 1)), "mrz");
+        validComposite = p.checkDigit(35, 1, p.rawValue(new MrzRange(0, 10, 1), new MrzRange(13, 20, 1), new MrzRange(21, 35, 1)), "mrz");
     }
 
     @Override

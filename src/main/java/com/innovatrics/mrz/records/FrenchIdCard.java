@@ -61,12 +61,12 @@ public class FrenchIdCard extends MrzRecord {
         nationality = p.parseString(new MrzRange(2, 5, 0));
         optional = p.parseString(new MrzRange(30, 36, 0));
         documentNumber = p.parseString(new MrzRange(0, 12, 1));
-        p.checkDigit(12, 1, new MrzRange(0, 12, 1), "document number");
+        validDocumentNumber = p.checkDigit(12, 1, new MrzRange(0, 12, 1), "document number");
         dateOfBirth = p.parseDate(new MrzRange(27, 33, 1));
-        p.checkDigit(33, 1, new MrzRange(27, 33, 1), "date of birth");
+        validDateOfBirth = p.checkDigit(33, 1, new MrzRange(27, 33, 1), "date of birth");
         sex = p.parseSex(34, 1);
         final String finalChecksum = mrz.toString().replace("\n","").substring(0, 36 + 35);
-        p.checkDigit(35, 1, finalChecksum, "final checksum");
+        validComposite = p.checkDigit(35, 1, finalChecksum, "final checksum");
         // TODO expirationDate is missing
     }
 

@@ -47,14 +47,15 @@ public class SlovakId2_34 extends MrzRecord {
         final MrzParser p = new MrzParser(mrz);
         setName(p.parseName(new MrzRange(5, 34, 0)));
         documentNumber = p.parseString(new MrzRange(0, 9, 1));
-        p.checkDigit(9, 1, new MrzRange(0, 9, 1), "document number");
+        validDocumentNumber = p.checkDigit(9, 1, new MrzRange(0, 9, 1), "document number");
         nationality = p.parseString(new MrzRange(10, 13, 1));
         dateOfBirth = p.parseDate(new MrzRange(13, 19, 1));
-        p.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth");
+        validDateOfBirth = p.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth");
         sex = p.parseSex(20, 1);
         expirationDate = p.parseDate(new MrzRange(21, 27, 1));
-        p.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date");
+        validExpirationDate = p.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date");
         optional = p.parseString(new MrzRange(28, 34, 1));
+        // TODO validComposite missing? (final MRZ check digit)
     }
 
     @Override

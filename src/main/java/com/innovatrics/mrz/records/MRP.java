@@ -38,22 +38,24 @@ public class MRP extends MrzRecord {
      */
     public String personalNumber;
 
+    public boolean validPersonalNumber;
+
     @Override
     public void fromMrz(String mrz) {
         super.fromMrz(mrz);
         final MrzParser parser = new MrzParser(mrz);
         setName(parser.parseName(new MrzRange(5, 44, 0)));
         documentNumber = parser.parseString(new MrzRange(0, 9, 1));
-        parser.checkDigit(9, 1, new MrzRange(0, 9, 1), "passport number");
+        validDocumentNumber = parser.checkDigit(9, 1, new MrzRange(0, 9, 1), "passport number");
         nationality = parser.parseString(new MrzRange(10, 13, 1));
         dateOfBirth = parser.parseDate(new MrzRange(13, 19, 1));
-        parser.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth");
+        validDateOfBirth = parser.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth");
         sex = parser.parseSex(20, 1);
         expirationDate = parser.parseDate(new MrzRange(21, 27, 1));
-        parser.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date");
+        validExpirationDate = parser.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date");
         personalNumber = parser.parseString(new MrzRange(28, 42, 1));
-        parser.checkDigit(42, 1, new MrzRange(28, 42, 1), "personal number");
-        parser.checkDigit(43, 1, parser.rawValue(new MrzRange(0, 10, 1), new MrzRange(13, 20, 1), new MrzRange(21, 43, 1)), "mrz");
+        validPersonalNumber = parser.checkDigit(42, 1, new MrzRange(28, 42, 1), "personal number");
+        validComposite = parser.checkDigit(43, 1, parser.rawValue(new MrzRange(0, 10, 1), new MrzRange(13, 20, 1), new MrzRange(21, 43, 1)), "mrz");
     }
 
     @Override

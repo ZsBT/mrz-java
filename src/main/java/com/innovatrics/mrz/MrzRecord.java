@@ -44,6 +44,9 @@ public abstract class MrzRecord implements Serializable {
      * For MRP: Type (for countries that distinguish between different types of passports)
      */
     public char code2;
+
+
+
     /**
      * An <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166-1 alpha-3</a> country code of issuing country, with additional allowed values (according to <a href="http://en.wikipedia.org/wiki/Machine-readable_passport">article on Wikipedia</a>):
      * <ul><li>D: Germany</li>
@@ -96,10 +99,15 @@ public abstract class MrzRecord implements Serializable {
      */
     public final MrzFormat format;
 
+
     /**
-     * If the check digit validation fails, this will contain the location.
+     * check digits, usually common in every document.
      */
-    public MrzRange invalidCheckdigit = null;
+    public boolean validDocumentNumber = true;
+    public boolean validDateOfBirth = true;
+    public boolean validExpirationDate = true;
+    public boolean validComposite = true;
+
 
     protected MrzRecord(MrzFormat format) {
         this.format = format;

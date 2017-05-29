@@ -21,12 +21,11 @@ package com.innovatrics.mrz;
 import com.innovatrics.mrz.types.MrzDate;
 import com.innovatrics.mrz.types.MrzFormat;
 import com.innovatrics.mrz.types.MrzSex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Parses the MRZ records.
@@ -122,10 +121,11 @@ public class MrzParser {
      * @param col the 0-based column of the check digit.
      * @param row the 0-based column of the check digit.
      * @param strRange the range for which the check digit is computed.
-     * @param fieldName (optional) field name. Used only when {@link MrzParseException} is thrown.
+     * @param fieldName (optional) field name. Used only when validity check fails.
+     * @return true if check digit is valid, false if not
      */
-    public void checkDigit(int col, int row, MrzRange strRange, String fieldName) {
-        checkDigit(col, row, rawValue(strRange), fieldName);
+    public boolean checkDigit(int col, int row, MrzRange strRange, String fieldName) {
+        return checkDigit(col, row, rawValue(strRange), fieldName);
     }
 
     /**
@@ -133,10 +133,16 @@ public class MrzParser {
      * @param col the 0-based column of the check digit.
      * @param row the 0-based column of the check digit.
      * @param str the raw MRZ substring.
-     * @param fieldName (optional) field name. Used only when {@link MrzParseException} is thrown.
+     * @param fieldName (optional) field name. Used only when validity check fails.
+     * @return true if check digit is valid, false if not
      */
-    public void checkDigit(int col, int row, String str, String fieldName) {
-        invalidCheckdigit = null;
+    public boolean checkDigit(int col, int row, String str, String fieldName) {
+
+        /**
+         * If the check digit validation fails, this will contain the location.
+         */
+        MrzRange invalidCheckdigit = null;
+
         final char digit = (char) (computeCheckDigit(str) + '0');
         char checkDigit = rows[row].charAt(col);
         if (checkDigit == FILLER) {
@@ -144,15 +150,12 @@ public class MrzParser {
         }
         if (digit != checkDigit) {
             invalidCheckdigit = new MrzRange(col, col + 1, row);
-            log.info("Check digit verification failed for " + fieldName + ": expected " + digit + " but got " + checkDigit);
+            System.out.println("Check digit verification failed for " + fieldName + ": expected " + digit + " but got " + checkDigit);
         }
+        return invalidCheckdigit==null;
     }
 
-    private static final Logger log = LoggerFactory.getLogger(MrzParser.class);
-    /**
-     * If the check digit validation fails, this will contain the location.
-     */
-    public MrzRange invalidCheckdigit = null;
+    static Logger log ;
 
     /**
      * Parses MRZ date.
@@ -250,9 +253,10 @@ public class MrzParser {
     public static MrzRecord parse(String mrz) {
         final MrzRecord result = MrzFormat.get(mrz).newRecord();
         result.fromMrz(mrz);
-        result.validCheckdigit = validCheckdigit;
         return result;
     }
+
+
     private static final Map<String, String> EXPAND_CHARACTERS = new HashMap<String, String>();
 
     static {

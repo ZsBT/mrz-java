@@ -50,16 +50,16 @@ public class MrtdTd1 extends MrzRecord {
         super.fromMrz(mrz);
         final MrzParser p = new MrzParser(mrz);
         documentNumber = p.parseString(new MrzRange(5, 14, 0));
-        p.checkDigit(14, 0, new MrzRange(5, 14, 0), "document number");
+        validDocumentNumber = p.checkDigit(14, 0, new MrzRange(5, 14, 0), "document number");
         optional = p.parseString(new MrzRange(15, 30, 0));
         dateOfBirth = p.parseDate(new MrzRange(0, 6, 1));
-        p.checkDigit(6, 1, new MrzRange(0, 6, 1), "date of birth");
+        validDateOfBirth = p.checkDigit(6, 1, new MrzRange(0, 6, 1), "date of birth");
         sex = p.parseSex(7, 1);
         expirationDate = p.parseDate(new MrzRange(8, 14, 1));
-        p.checkDigit(14, 1, new MrzRange(8, 14, 1), "expiration date");
+        validExpirationDate = p.checkDigit(14, 1, new MrzRange(8, 14, 1), "expiration date");
         nationality = p.parseString(new MrzRange(15, 18, 1));
         optional2 = p.parseString(new MrzRange(18, 29, 1));
-        p.checkDigit(29, 1, p.rawValue(new MrzRange(5, 30, 0), new MrzRange(0, 7, 1), new MrzRange(8, 15, 1), new MrzRange(18, 29, 1)), "mrz");
+        validComposite = p.checkDigit(29, 1, p.rawValue(new MrzRange(5, 30, 0), new MrzRange(0, 7, 1), new MrzRange(8, 15, 1), new MrzRange(18, 29, 1)), "mrz");
         setName(p.parseName(new MrzRange(0, 30, 2)));
     }
 
