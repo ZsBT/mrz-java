@@ -40,6 +40,23 @@ public class MrzParserTest {
     }
 
     @Test
+    public void testValidCheckDigit(){
+
+        String CzechPassport = "P<CZESPECIMEN<<VZOR<<<<<<<<<<<<<<<<<<<<<<<<<\n99003853<1CZE1101018M1207046110101111<<<<<94";
+        assertEquals( true, MrzParser.parse(CzechPassport).validDateOfBirth );
+        assertEquals( true, MrzParser.parse(CzechPassport).validExpirationDate );
+        assertEquals( true, MrzParser.parse(CzechPassport).validDocumentNumber );
+        assertEquals( true, MrzParser.parse(CzechPassport).validComposite );
+
+        String GermanPassport =  "P<D<<MUSTERMANN<<ERIKA<<<<<<<<<<<<<<<<<<<<<<\nC01X01R741D<<6408125F2010315<<<<<<<<<<<<<<<9";
+        assertEquals( true, MrzParser.parse(GermanPassport).validDateOfBirth );
+        assertEquals( true, MrzParser.parse(GermanPassport).validExpirationDate );
+        assertEquals( true, MrzParser.parse(GermanPassport).validDocumentNumber );
+        assertEquals( false, MrzParser.parse(GermanPassport).validComposite ); // yes, this specimen has intentationally wrong check digit
+
+    }
+
+    @Test
     public void testDateParsing() {
         assertEquals(new MrzDate(34, 7, 12), new MrzParser("CIUTOD231458907A123X5328434D23\n3407127M9507122UTO<<<<<<<<<<<6\nSTEVENSON<<PETER<<<<<<<<<<<<<<\n").parseDate(new MrzRange(0,6,1)));
         assertEquals(new MrzDate(95, 12, 1), new MrzParser("CIUTOD231458907A123X5328434D23\n3407127M9512012UTO<<<<<<<<<<<6\nSTEVENSON<<PETER<<<<<<<<<<<<<<\n").parseDate(new MrzRange(8,14,1)));
