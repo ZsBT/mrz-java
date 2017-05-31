@@ -59,8 +59,9 @@ public class MrzParser {
     }
 
     /**
-     * Parses the MRZ name in form of SURNAME&lt;&lt;FIRSTNAME&lt;
-     * @param range the range
+     * @author jllarraz@github
+     * Parses the MRZ name in form of SURNAME<<FIRSTNAME<
+     * @Param range the range
      * @return array of [surname, first_name], never null, always with a length of 2.
      */
     public String[] parseName(MrzRange range) {
@@ -70,8 +71,17 @@ public class MrzParser {
             str = str.substring(0, str.length() - 1);
         }
         final String[] names = str.split("<<");
-        final String surname = parseString(new MrzRange(range.column, range.column + names[0].length(), range.row));
-        final String givenNames = parseString(new MrzRange(range.column + names[0].length() + 2, range.column + str.length(), range.row));
+        String surname = "";
+        String givenNames = "";
+        surname = parseString(new MrzRange(range.column, range.column + names[0].length(), range.row));
+        if(names.length==1){
+            givenNames = parseString(new MrzRange(range.column, range.column + names[0].length(), range.row));
+            surname = "";
+        }
+        else if(names.length>1){
+            surname = parseString(new MrzRange(range.column, range.column + names[0].length(), range.row));
+            givenNames = parseString(new MrzRange(range.column + names[0].length() + 2, range.column + str.length(), range.row));
+        }
         return new String[]{surname, givenNames};
     }
 
