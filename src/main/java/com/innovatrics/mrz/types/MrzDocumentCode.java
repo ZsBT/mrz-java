@@ -29,6 +29,7 @@ public enum MrzDocumentCode {
 
     /**
      * A passport, P or IP.
+     * ... maybe Travel Document that is very similar to the passport.
      */
     Passport,
     /**
@@ -56,32 +57,38 @@ public enum MrzDocumentCode {
      */
     Migrant;
 
+    /**
+     * @author Zsombor
+     * turning to switch statement due to lots of types
+     *
+     * @param mrz
+     * @return
+     */
     public static MrzDocumentCode parse(String mrz) {
         final String code = mrz.substring(0, 2);
-        if (code.equals("IV")) {
-            throw new MrzParseException("IV document code is not allowed", mrz, new MrzRange(0, 2, 0), null);
+
+        // 2-letter checks
+        switch(code){
+            case "IV":
+                throw new MrzParseException("IV document code is not allowed", mrz, new MrzRange(0, 2, 0), null); // TODO why?
+            case "AC": return CrewMember;
+            case "ME": return Migrant;
+            case "TD": return Migrant; // travel document
+            case "IP": return Passport;
         }
-        if (code.charAt(0) == 'P' || code.equals("IP")) {
-            return Passport;
+
+        // 1-letter checks
+        switch(code.charAt(0)){
+            case 'T':   // usually Travel Document
+            case 'P': return Passport;
+            case 'A': return TypeA;
+            case 'C': return TypeC;
+            case 'V': return TypeV;
+            case 'I': return TypeI; // identity card or residence permit
+            case 'R': return Migrant;  // swedish '51 Convention Travel Document
         }
-        if (code.equals("AC")) {
-            return CrewMember;
-        }
-        if (code.charAt(0) == 'I') {
-            return TypeI;
-        }
-        if (code.charAt(0) == 'A') {
-            return TypeA;
-        }
-        if (code.charAt(0) == 'C') {
-            return TypeC;
-        }
-        if (code.charAt(0) == 'V') {
-            return TypeV;
-        }
-        if (code.equals("ME")) {
-            return Migrant;
-        }
-        throw new MrzParseException("Invalid document code: " + code, mrz, new MrzRange(0, 2, 0), null);
+
+
+        throw new MrzParseException("Unsupported document code: " + code, mrz, new MrzRange(0, 2, 0), null);
     }
 }
