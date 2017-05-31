@@ -43,38 +43,6 @@ Then add the following to your dependencies:
 </dependency>
 ```
 
-NOTE: use `com.innovatrics.mrz` for versions higher than 0.4.
-
-## Changelog
-
-### 0.4.1 ("Checkdigit" branch)
-- check digit validation does not throw exception
-- introducing check digit validity properties (
-validDateOfBirth, validExpirationDate, validDocumentNumber, validComposite )
-in result object
-
-### 0.4
-
-- Fixed final checksum field, thanks to Marin Moulinier
-
-### 0.3
-- Added support for shortening names.
-
-- Fixed name conversion: D'Artagnan gets properly converted to DARTAGNAN
-
-- Added character expansion, e.g. Ä gets expanded to AE
-
-### 0.2
-- Added support for serializing record back to the MRZ form
-
-- Fixed failing tests on Windows
-
-- Added support for French ID Card records (Pierrick Martin)
-
-- Added support for VISA A/B records (Jeremy Le Berre)
-
-### 0.1
-- Initial release
 
 ## License
   Java parser for the MRZ records, as specified by the ICAO organization.
