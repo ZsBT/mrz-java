@@ -26,7 +26,7 @@
     <packaging>jar</packaging>
     <version>0.5-SNAPSHOT</version>
     <name>MRZ Java Parser</name>
-    <url>https://github.com/mvysny/mrz-java</url>
+    <url>https://github.com/ZsBT/mrz-java</url>
     <inceptionYear>2011</inceptionYear>
     <description>Provides Java MRZ parser</description>
     <organization>
@@ -34,11 +34,11 @@
         <url>http://www.innovatrics.com</url>
     </organization>
     <scm>
-        <connection>scm:hg:ssh://git@github.com/mvysny/mrz-java</connection>
+        <connection>scm:hg:ssh://git@github.com/ZsBT/mrz-java</connection>
     </scm>
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/mvysny/mrz-java/issues</url>
+        <url>https://github.com/ZsBT/mrz-java/issues</url>
     </issueManagement>
     <distributionManagement>
         <repository>
