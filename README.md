@@ -12,38 +12,6 @@ final MrzRecord record = MrzParser.parse("I<UTOSTEVENSON<<PETER<<<<<<<<<<<<<<<\n
 System.out.println("Name: " + record.givenNames + " " + record.surname);
 ```
 
-## Usage with Maven 2/3
-
-Add the baka.sk maven 2 repo to your maven installation - edit `~/.m2/settings.xml` so that it will look like the following:
-```xml
-<settings>
- <profiles>
-  <profile>
-   <id>default</id>
-   <activation><activeByDefault>true</activeByDefault></activation>
-   <repositories>
-    <repository>
-     <id>baka</id>
-     <name>baka.sk</name>
-     <url>http://www.baka.sk/maven2</url>
-    </repository>
-   </repositories>
-  </profile>
- </profiles>
-</settings>
-```
-
-Then add the following to your dependencies:
-
-```xml
-<dependency>
- <groupId>org.innovatrics.mrz</groupId>
- <artifactId>mrz-java</artifactId>
- <version>0.4</version>
-</dependency>
-```
-
-
 ## License
   Java parser for the MRZ records, as specified by the ICAO organization.
   Copyright (C) 2011 Innovatrics s.r.o.

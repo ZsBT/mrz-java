@@ -24,7 +24,7 @@
     <groupId>com.innovatrics.mrz</groupId>
     <artifactId>mrz-java</artifactId>
     <packaging>jar</packaging>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.5</version>
     <name>MRZ Java Parser</name>
     <url>https://github.com/ZsBT/mrz-java</url>
     <inceptionYear>2011</inceptionYear>
@@ -40,12 +40,6 @@
         <system>Github</system>
         <url>https://github.com/ZsBT/mrz-java/issues</url>
     </issueManagement>
-    <distributionManagement>
-        <repository>
-            <id>realtime</id>
-            <url>scp://rt.sk/home/moto/public_html/maven2</url>
-        </repository>
-    </distributionManagement>
     <licenses>
         <license>
             <name>The GNU Lesser General Public License, version 2.1 (LGPL-2.1)</name>
@@ -149,4 +143,3 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
-
