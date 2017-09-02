@@ -95,14 +95,14 @@ public class MrzParserTest {
     }
 
     @Test
-    public void testInvalidBirthDate() {
+    public void testMrzInvalidBirthDate() {
         String invalidBirthDateMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBR8809417F2007162<<<<<<<<<<<<<<08";
         MrzRecord record = MrzParser.parse(invalidBirthDateMrz);
         assertEquals(false, record.dateOfBirth.isValidDate());
     }
 
     @Test
-    public void testInvalidExpiryDate() {
+    public void testMrzInvalidExpiryDate() {
         String invalidExpiryDateMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBR8809117F2007462<<<<<<<<<<<<<<08";
         MrzRecord record = MrzParser.parse(invalidExpiryDateMrz);
         assertEquals(false, record.expirationDate.isValidDate());

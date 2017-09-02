@@ -121,6 +121,10 @@ public class MrzDate implements Serializable, Comparable<MrzDate> {
         return Integer.valueOf(year * 10000 + month * 100 + day).compareTo(o.year * 10000 + o.month * 100 + o.day);
     }
 
+    /**
+     * Returns the date validity
+     * @return Returns a boolean true if the parsed date is valid, false otherwise
+     */
     public boolean isValidDate() {
         return isValidDate;
     }
