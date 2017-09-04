@@ -63,7 +63,7 @@ public class FrenchIdCard extends MrzRecord {
         documentNumber = p.parseString(new MrzRange(0, 12, 1));
         validDocumentNumber = p.checkDigit(12, 1, new MrzRange(0, 12, 1), "document number");
         dateOfBirth = p.parseDate(new MrzRange(27, 33, 1));
-        validDateOfBirth = p.checkDigit(33, 1, new MrzRange(27, 33, 1), "date of birth");
+        validDateOfBirth = p.checkDigit(33, 1, new MrzRange(27, 33, 1), "date of birth") && dateOfBirth.isValidDate();
         sex = p.parseSex(34, 1);
         final String finalChecksum = mrz.toString().replace("\n","").substring(0, 36 + 35);
         validComposite = p.checkDigit(35, 1, finalChecksum, "final checksum");
