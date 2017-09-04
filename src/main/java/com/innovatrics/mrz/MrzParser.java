@@ -21,11 +21,12 @@ package com.innovatrics.mrz;
 import com.innovatrics.mrz.types.MrzDate;
 import com.innovatrics.mrz.types.MrzFormat;
 import com.innovatrics.mrz.types.MrzSex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Parses the MRZ records.
@@ -165,7 +166,7 @@ public class MrzParser {
         return invalidCheckdigit==null;
     }
 
-    static Logger log ;
+    private static Logger log = LoggerFactory.getLogger(MrzParser.class);
 
     /**
      * Parses MRZ date.
@@ -182,17 +183,17 @@ public class MrzParser {
             r = new MrzRange(range.column, range.column + 2, range.row);
             final int year = Integer.parseInt(rawValue(r));
             if (year < 0 || year > 99) {
-                throw new MrzParseException("Failed to parse MRZ date: invalid year value " + year + ": must be 0..99", mrz, r, format);
+                log.debug("Invalid year value " + year + ": must be 0..99");
             }
             r = new MrzRange(range.column + 2, range.column + 4, range.row);
             final int month = Integer.parseInt(rawValue(r));
             if (month < 1 || month > 12) {
-                throw new MrzParseException("Failed to parse MRZ date: invalid month value " + month + ": must be 1..12", mrz, r, format);
+                log.debug("Invalid month value " + month + ": must be 1..12");
             }
             r = new MrzRange(range.column + 4, range.column + 6, range.row);
             final int day = Integer.parseInt(rawValue(r));
             if (day < 1 || day > 31) {
-                throw new MrzParseException("Failed to parse MRZ date: invalid day value " + day + ": must be 1..31", mrz, r, format);
+                log.debug("Invalid day value " + day + ": must be 1..31");
             }
             return new MrzDate(year, month, day);
         } catch (NumberFormatException ex) {
