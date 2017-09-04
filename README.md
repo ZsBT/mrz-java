@@ -2,6 +2,9 @@
 
 Machine-Readable Zone (MRZ, see http://en.wikipedia.org/wiki/Machine-readable_passport ) parser for Java, as defined by ICAO: http://www.icao.int/
 
+## Branches
+
+Branch "master" is for hotfixes only. For enhancements and minor bugfixes, please use branch "development".
 
 ## Example
 
