@@ -178,27 +178,42 @@ public class MrzParser {
         if (range.length() != 6) {
             throw new IllegalArgumentException("Parameter range: invalid value " + range + ": must be 6 characters long");
         }
-        MrzRange r = null;
+        MrzRange r;
+        r = new MrzRange(range.column, range.column + 2, range.row);
+        int year;
         try {
-            r = new MrzRange(range.column, range.column + 2, range.row);
-            final int year = Integer.parseInt(rawValue(r));
-            if (year < 0 || year > 99) {
-                log.debug("Invalid year value " + year + ": must be 0..99");
-            }
-            r = new MrzRange(range.column + 2, range.column + 4, range.row);
-            final int month = Integer.parseInt(rawValue(r));
-            if (month < 1 || month > 12) {
-                log.debug("Invalid month value " + month + ": must be 1..12");
-            }
-            r = new MrzRange(range.column + 4, range.column + 6, range.row);
-            final int day = Integer.parseInt(rawValue(r));
-            if (day < 1 || day > 31) {
-                log.debug("Invalid day value " + day + ": must be 1..31");
-            }
-            return new MrzDate(year, month, day);
+            year = Integer.parseInt(rawValue(r));
         } catch (NumberFormatException ex) {
-            throw new MrzParseException("Failed to parse MRZ date " + rawValue(range) + ": " + ex, mrz, r, format);
+            year = -1;
+            log.debug("Failed to parse MRZ date year " + rawValue(range) + ": " + ex, mrz, r);
         }
+        if (year < 0 || year > 99) {
+            log.debug("Invalid year value " + year + ": must be 0..99");
+        }
+        r = new MrzRange(range.column + 2, range.column + 4, range.row);
+        int month;
+        try {
+            month = Integer.parseInt(rawValue(r));
+        } catch (NumberFormatException ex) {
+            month = -1;
+            log.debug("Failed to parse MRZ date month " + rawValue(range) + ": " + ex, mrz, r);
+        }
+        if (month < 1 || month > 12) {
+            log.debug("Invalid month value " + month + ": must be 1..12");
+        }
+        r = new MrzRange(range.column + 4, range.column + 6, range.row);
+        int day;
+        try {
+            day = Integer.parseInt(rawValue(r));
+        } catch (NumberFormatException ex) {
+            day = -1;
+            log.debug("Failed to parse MRZ date month " + rawValue(range) + ": " + ex, mrz, r);
+        }
+        if (day < 1 || day > 31) {
+            log.debug("Invalid day value " + day + ": must be 1..31");
+        }
+        return new MrzDate(year, month, day);
+
     }
 
     /**

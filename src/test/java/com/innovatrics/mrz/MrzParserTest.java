@@ -111,4 +111,23 @@ public class MrzParserTest {
         assertEquals(false, record.expirationDate.isValidDate());
         assertEquals(false, record.validExpirationDate);
     }
+
+    @Test
+    public void testUnparseableDates() {
+        String validBirthDateMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBRBB09117F2ZZ7162<<<<<<<<<<<<<<08";
+        MrzRecord record = MrzParser.parse(validBirthDateMrz);
+        assertNotNull(record.dateOfBirth);
+        assertEquals(-1, record.dateOfBirth.year);
+        assertEquals(9, record.dateOfBirth.month);
+        assertEquals(11, record.dateOfBirth.day);
+        assertEquals(false, record.dateOfBirth.isValidDate());
+        assertEquals(false, record.validDateOfBirth);
+
+        assertNotNull(record.expirationDate);
+        assertEquals(-1, record.expirationDate.year);
+        assertEquals(-1, record.expirationDate.month);
+        assertEquals(16, record.expirationDate.day);
+        assertEquals(false, record.expirationDate.isValidDate());
+        assertEquals(false, record.validExpirationDate);
+    }
 }
