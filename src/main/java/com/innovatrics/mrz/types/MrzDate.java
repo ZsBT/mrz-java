@@ -49,6 +49,8 @@ public class MrzDate implements Serializable, Comparable<MrzDate> {
      */
     public final int day;
 
+    private final String mrz;
+
     /**
      * Is the date valid or not
      */
@@ -59,6 +61,15 @@ public class MrzDate implements Serializable, Comparable<MrzDate> {
         this.month = month;
         this.day = day;
         isValidDate = check();
+        this.mrz = null;
+    }
+
+    public MrzDate(int year, int month, int day, String raw) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        isValidDate = check();
+        this.mrz = raw;
     }
 
     @Override
@@ -67,7 +78,11 @@ public class MrzDate implements Serializable, Comparable<MrzDate> {
     }
 
     public String toMrz() {
-        return String.format("%02d%02d%02d", year, month, day);
+        if(mrz != null) {
+            return mrz;
+        } else {
+            return String.format("%02d%02d%02d", year, month, day);
+        }
     }
 
     private boolean check() {
@@ -125,7 +140,7 @@ public class MrzDate implements Serializable, Comparable<MrzDate> {
      * Returns the date validity
      * @return Returns a boolean true if the parsed date is valid, false otherwise
      */
-    public boolean isValidDate() {
+    public boolean isDateValid() {
         return isValidDate;
     }
 }
