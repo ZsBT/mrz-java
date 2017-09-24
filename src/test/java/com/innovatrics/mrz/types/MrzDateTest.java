@@ -55,6 +55,8 @@ public class MrzDateTest {
     public void testToMrz() {
         assertEquals("550431", new MrzDate(55, 4, 31).toMrz());
         assertEquals("081201", new MrzDate(8, 12, 1).toMrz());
+        assertEquals("880941", new MrzDate(88, 9, 41).toMrz());
+        assertEquals("BB1201", new MrzDate(-1, 12, 1, "BB1201").toMrz());
     }
 
     @Test
@@ -63,7 +65,7 @@ public class MrzDateTest {
         assertEquals(88, date.year);
         assertEquals(9, date.month);
         assertEquals(41, date.day);
-        assertEquals(false, date.isValidDate());
+        assertEquals(false, date.isDateValid());
     }
 
     @Test
@@ -72,6 +74,6 @@ public class MrzDateTest {
         assertEquals(88, date.year);
         assertEquals(9, date.month);
         assertEquals(30, date.day);
-        assertEquals(true, date.isValidDate());
+        assertEquals(true, date.isDateValid());
     }
 }

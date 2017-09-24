@@ -212,7 +212,7 @@ public class MrzParser {
         if (day < 1 || day > 31) {
             log.debug("Invalid day value " + day + ": must be 1..31");
         }
-        return new MrzDate(year, month, day);
+        return new MrzDate(year, month, day, rawValue(range));
 
     }
 
