@@ -1,6 +1,8 @@
 /build
-app.iml
 build.gradle
 proguard-rules.pro
 src/main/AndroidManifest.xml
 src/main/res/
+/target
+/.idea
+*.iml

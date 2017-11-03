@@ -18,7 +18,11 @@
  */
 package com.innovatrics.mrz.types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
+
 
 /**
  * Holds a MRZ date type.
@@ -26,6 +30,9 @@ import java.io.Serializable;
  */
 public class MrzDate implements Serializable, Comparable<MrzDate> {
     private static final long serialVersionUID = 1L;
+
+    private static Logger log = LoggerFactory.getLogger(MrzDate.class);
+
 
     /**
      * Year, 00-99.
@@ -42,11 +49,27 @@ public class MrzDate implements Serializable, Comparable<MrzDate> {
      */
     public final int day;
 
+    private final String mrz;
+
+    /**
+     * Is the date valid or not
+     */
+    private final boolean isValidDate;
+
     public MrzDate(int year, int month, int day) {
         this.year = year;
         this.month = month;
         this.day = day;
-        check();
+        isValidDate = check();
+        this.mrz = null;
+    }
+
+    public MrzDate(int year, int month, int day, String raw) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        isValidDate = check();
+        this.mrz = raw;
     }
 
     @Override
@@ -55,19 +78,28 @@ public class MrzDate implements Serializable, Comparable<MrzDate> {
     }
 
     public String toMrz() {
-        return String.format("%02d%02d%02d", year, month, day);
+        if(mrz != null) {
+            return mrz;
+        } else {
+            return String.format("%02d%02d%02d", year, month, day);
+        }
     }
 
-    private void check() {
+    private boolean check() {
         if (year < 0 || year > 99) {
-            throw new IllegalArgumentException("Parameter year: invalid value " + year + ": must be 0..99");
+            log.debug("Parameter year: invalid value " + year + ": must be 0..99");
+            return false;
         }
         if (month < 1 || month > 12) {
-            throw new IllegalArgumentException("Parameter month: invalid value " + month + ": must be 1..12");
+            log.debug("Parameter month: invalid value " + month + ": must be 1..12");
+            return false;
         }
         if (day < 1 || day > 31) {
-            throw new IllegalArgumentException("Parameter day: invalid value " + day + ": must be 1..31");
+            log.debug("Parameter day: invalid value " + day + ": must be 1..31");
+            return false;
         }
+
+        return true;
     }
 
     @Override
@@ -102,5 +134,13 @@ public class MrzDate implements Serializable, Comparable<MrzDate> {
 
     public int compareTo(MrzDate o) {
         return Integer.valueOf(year * 10000 + month * 100 + day).compareTo(o.year * 10000 + o.month * 100 + o.day);
+    }
+
+    /**
+     * Returns the date validity
+     * @return Returns a boolean true if the parsed date is valid, false otherwise
+     */
+    public boolean isDateValid() {
+        return isValidDate;
     }
 }

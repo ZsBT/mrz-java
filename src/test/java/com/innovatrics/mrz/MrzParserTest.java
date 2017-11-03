@@ -53,7 +53,6 @@ public class MrzParserTest {
         assertEquals( true, MrzParser.parse(GermanPassport).validExpirationDate );
         assertEquals( true, MrzParser.parse(GermanPassport).validDocumentNumber );
         assertEquals( false, MrzParser.parse(GermanPassport).validComposite ); // yes, this specimen has intentationally wrong check digit
-
     }
 
     @Test
@@ -85,5 +84,65 @@ public class MrzParserTest {
         assertEquals("NILAVADHANANANDA<<CHAYAPA<DEJ<K", MrzParser.nameToMrz("Nilavadhanananda", "Chayapa Dejthamrong Krasuang", 31));
         assertEquals("NILAVADHANANANDA<<ARNPOL<PETC<C", MrzParser.nameToMrz("NILAVADHANANANDA", "ARNPOL PETCH CHARONGUANG", 31));
         assertEquals("BENNELONG<WOOLOOMOOLOO<W<W<<D<P", MrzParser.nameToMrz("BENNELONG WOOLOOMOOLOO WARRANDYTE WARNAMBOOL", "DINGO POTOROO", 31));
+    }
+
+    @Test
+    public void testValidDates() {
+        String validBirthDateMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBR8809117F2007162<<<<<<<<<<<<<<08";
+        MrzRecord record = MrzParser.parse(validBirthDateMrz);
+        assertEquals(true, record.dateOfBirth.isDateValid());
+        assertEquals(true, record.expirationDate.isDateValid());
+        assertEquals(true, record.validDateOfBirth);
+        assertEquals(true, record.validExpirationDate);
+    }
+
+    @Test
+    public void testMrzInvalidBirthDate() {
+        String invalidBirthDateMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBR8809417F2007162<<<<<<<<<<<<<<08";
+        MrzRecord record = MrzParser.parse(invalidBirthDateMrz);
+        assertEquals(false, record.dateOfBirth.isDateValid());
+        assertEquals(false, record.validDateOfBirth);
+    }
+
+    @Test
+    public void testMrzInvalidExpiryDate() {
+        String invalidExpiryDateMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBR8809117F2007462<<<<<<<<<<<<<<08";
+        MrzRecord record = MrzParser.parse(invalidExpiryDateMrz);
+        assertEquals(false, record.expirationDate.isDateValid());
+        assertEquals(false, record.validExpirationDate);
+    }
+
+    @Test
+    public void testUnparseableDates() {
+        String unparseableDatesMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBRBB09117F2ZZ7162<<<<<<<<<<<<<<08";
+        MrzRecord record = MrzParser.parse(unparseableDatesMrz);
+        assertNotNull(record.dateOfBirth);
+        assertEquals(-1, record.dateOfBirth.year);
+        assertEquals(9, record.dateOfBirth.month);
+        assertEquals(11, record.dateOfBirth.day);
+        assertEquals(false, record.dateOfBirth.isDateValid());
+        assertEquals(false, record.validDateOfBirth);
+
+        assertNotNull(record.expirationDate);
+        assertEquals(-1, record.expirationDate.year);
+        assertEquals(-1, record.expirationDate.month);
+        assertEquals(16, record.expirationDate.day);
+        assertEquals(false, record.expirationDate.isDateValid());
+        assertEquals(false, record.validExpirationDate);
+    }
+
+    @Test
+    public void testRawDate() {
+        String validBirthDateMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBR8809117F2007162<<<<<<<<<<<<<<08";
+        MrzRecord record = MrzParser.parse(validBirthDateMrz);
+        assertEquals("880911", record.dateOfBirth.toMrz());
+
+        String invalidBirthDateMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBR8809417F2007162<<<<<<<<<<<<<<08";
+        record = MrzParser.parse(invalidBirthDateMrz);
+        assertEquals("880941", record.dateOfBirth.toMrz());
+
+        String unparseableDatesMrz = "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<\n9250764733GBRBB09117F2007162<<<<<<<<<<<<<<08";
+        record = MrzParser.parse(unparseableDatesMrz);
+        assertEquals("BB0911", record.dateOfBirth.toMrz());
     }
 }

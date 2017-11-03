@@ -50,10 +50,10 @@ public class SlovakId2_34 extends MrzRecord {
         validDocumentNumber = p.checkDigit(9, 1, new MrzRange(0, 9, 1), "document number");
         nationality = p.parseString(new MrzRange(10, 13, 1));
         dateOfBirth = p.parseDate(new MrzRange(13, 19, 1));
-        validDateOfBirth = p.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth");
+        validDateOfBirth = p.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth") && dateOfBirth.isDateValid();
         sex = p.parseSex(20, 1);
         expirationDate = p.parseDate(new MrzRange(21, 27, 1));
-        validExpirationDate = p.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date");
+        validExpirationDate = p.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date") && expirationDate.isDateValid();
         optional = p.parseString(new MrzRange(28, 34, 1));
         // TODO validComposite missing? (final MRZ check digit)
     }

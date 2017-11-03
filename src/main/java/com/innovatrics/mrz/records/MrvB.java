@@ -52,10 +52,10 @@ public class MrvB extends MrzRecord {
         validDocumentNumber = parser.checkDigit(9, 1, new MrzRange(0, 9, 1), "passport number");
         nationality = parser.parseString(new MrzRange(10, 13, 1));
         dateOfBirth = parser.parseDate(new MrzRange(13, 19, 1));
-        validDateOfBirth = parser.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth");
+        validDateOfBirth = parser.checkDigit(19, 1, new MrzRange(13, 19, 1), "date of birth") && dateOfBirth.isDateValid();
         sex = parser.parseSex(20, 1);
         expirationDate = parser.parseDate(new MrzRange(21, 27, 1));
-        validExpirationDate = parser.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date");
+        validExpirationDate = parser.checkDigit(27, 1, new MrzRange(21, 27, 1), "expiration date") && expirationDate.isDateValid();
         optional = parser.parseString(new MrzRange(28, 36, 1));
         // TODO validComposite missing? (full MRZ line)
     }
