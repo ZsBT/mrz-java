@@ -301,6 +301,10 @@ public class MrzParser {
         EXPAND_CHARACTERS.put("\u00DC", "UE"); // Ü
         EXPAND_CHARACTERS.put("\u00FC", "UE"); // ü
         EXPAND_CHARACTERS.put("\u00DF", "SS"); // ß
+        EXPAND_CHARACTERS.put("\u00D0", "D");  // Ð
+        EXPAND_CHARACTERS.put("\u00F0", "d");  // ð
+        EXPAND_CHARACTERS.put("\u00DE", "TH"); // Þ
+        EXPAND_CHARACTERS.put("\u00FE", "th"); // þ
     }
 
     /**
